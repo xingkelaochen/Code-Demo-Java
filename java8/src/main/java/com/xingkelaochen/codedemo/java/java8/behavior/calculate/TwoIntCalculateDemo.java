@@ -8,7 +8,8 @@ import com.xingkelaochen.codedemo.java.java8.behavior.calculate.strategy.TwoIntS
 
 /**
  * 
- * 演示几种业务行为传递的实现方式，逐步向行为参数化演进
+ * 演示几种业务行为传递的实现方式，逐步向行为参数化演进 <br />
+ * lambda参见 : https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html
  *
  * @author xingkelaochen
  * 
@@ -53,7 +54,7 @@ public class TwoIntCalculateDemo {
 	 * 
 	 * @return
 	 */
-	public int anonymousInnerClass(int a, int b, String operate) {
+	public int byAnonymousInnerClass(int a, int b, String operate) {
 
 		if (operate.equals("add")) {
 			return (new ITwoIntCalculateStrategy() {
@@ -126,7 +127,7 @@ public class TwoIntCalculateDemo {
 
 	/**
 	 * 使用策略模式，较为理想的实现方式。 <br />
-	 * 但是为每一种业务都需要写ITwoIntCalculateStrategy接口的实现类，并且调用方的代码可读性不太好（只根据自定义的方法名称，他人无法很好的了解业务是什么）。
+	 * 但是为每一种业务都需要写ITwoIntCalculateStrategy接口的实现类，并且调用方的代码可读性不太好（只根据自定义的方法名称，他人无法较直观的了解业务是什么）。
 	 * 
 	 * @param a
 	 *            整数a
@@ -139,7 +140,7 @@ public class TwoIntCalculateDemo {
 	public int strategyPattern(int a, int b, ITwoIntCalculateStrategy strategy) {
 
 		TwoIntCalculateContext context = new TwoIntCalculateContext(strategy);
-
+			
 		return context.calculate(a, b);
 	}
 

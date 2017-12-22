@@ -6,6 +6,7 @@
   <packaging>pom</packaging>
   <modules>
   	<module>java8</module>
+  	<module>spring-boot-demo</module>
   </modules>
   <description>Java技术代码演示</description>
   <url>http://www.xingkelaochen.com</url>
