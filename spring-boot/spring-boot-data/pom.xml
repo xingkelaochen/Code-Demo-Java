@@ -1,9 +1,25 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>com.xingkelaochen.codedemo</groupId>
-    <artifactId>spring-boot</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-  </parent>
-  <artifactId>spring-boot-data</artifactId>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.xingkelaochen.codedemo</groupId>
+		<artifactId>spring-boot</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<artifactId>spring-boot-data</artifactId>
+
+	<packaging>jar</packaging>
+
+	<name>Spring-Boot-Data</name>
+	<url>http://www.xingkelaochen.com</url>
+	<description>Spring-Boot-Data代码演示</description>
+	
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<version>2.0.0.BUILD-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
 </project>
