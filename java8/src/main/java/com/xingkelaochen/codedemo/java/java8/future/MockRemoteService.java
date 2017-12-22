@@ -35,12 +35,12 @@ public class MockRemoteService {
 	 * @param str 接口参数
 	 * @return 返回运算结果的字符串类型
 	 */
-	public String service(String str) throws Exception {
+	public int service(String str) throws Exception {
 		
-		// 加入模拟延时
-		delay();
+		// 加入模拟延时，固定5秒
+		Thread.currentThread().sleep(5*1000);
 		
-		return new ScriptEngineManager().getEngineByName("javascript").eval(str).toString();
+		return Integer.parseInt(new ScriptEngineManager().getEngineByName("javascript").eval(str).toString());
 		
 	}
 }

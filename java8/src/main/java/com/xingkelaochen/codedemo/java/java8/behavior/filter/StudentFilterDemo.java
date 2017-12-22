@@ -192,7 +192,7 @@ public class StudentFilterDemo {
 	}
 
 	/**
-	 * 让我们先睹为快，利益于JDK8的新特性，如果我们使用stream来做列表的筛选，那将是一件可以称之为神奇的事情 <br />
+	 * 让我们先睹为快，得益于JDK8的新特性，如果我们使用stream来做列表的筛选，那将是一件可以称之为神奇的事情 <br />
 	 * filter方法中使用的lambda符合JDK8中自带的Predicate函数式接口的签名
 	 * 
 	 * @param studentList
