@@ -410,7 +410,6 @@ public class FutureDemo {
 		Optional<Integer> sum = list.parallelStream().map((x) -> invokeService(a + "+" + b, "第" + x + "次异步"))
 				.reduce(Integer::sum);
 
-		int result = sum.get() / 3;
 
 		System.out.println("异步阻塞式[asyncBlockProcessByStream]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
 
@@ -419,8 +418,6 @@ public class FutureDemo {
 		List<CompletableFuture<Integer>> futureList = IntStream.rangeClosed(1, loopCount).boxed()
 				.map((x) -> CompletableFuture.supplyAsync(() -> invokeService(a + "+" + b, "第" + x + "次")))
 				.collect(Collectors.toList());
-
-		List<Integer> valList = futureList.stream().map(CompletableFuture::join).collect(Collectors.toList());
 
 		System.out.println("当前运行环境线程数：" + Runtime.getRuntime().availableProcessors()
 				+ "，异步阻塞式[CompletableFutureSupplyAsyncAndStream]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
