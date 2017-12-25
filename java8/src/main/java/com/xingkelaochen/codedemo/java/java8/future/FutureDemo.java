@@ -401,7 +401,7 @@ public class FutureDemo {
 	public void asyncBlockProcessCompare(int a, int b) {
 
 		// 请求次数
-		int loopCount = 9;
+		int loopCount = 4;
 
 		// 使用parallelStream并行流的处理方式
 		long init = System.currentTimeMillis();
@@ -442,7 +442,7 @@ public class FutureDemo {
 	 *            需要运算的a整数
 	 * @param b
 	 *            需要运算的b整数
-	 * @return 三次调用结果的平均值
+	 * @return 九次调用结果的平均值
 	 */
 	public int withExecutor(int a, int b) {
 
@@ -475,9 +475,12 @@ public class FutureDemo {
 		// 但是现在神奇了,9次请求居然只用了1388毫秒，这已经很快了，不是吗？yeah~
 		// 问题：如果第一个请求远程服务的流换成parallelStream并行流，效率会不会更好一点？其实不见得，supplyAsync方法已经是异步的，效率不会提升而且新开的线程还可能会消耗性能。
 
-		return valList.stream().reduce(Integer::sum).get() / 3;
+		return valList.stream().reduce(Integer::sum).get() / 9;
 
 	}
+	
+	// 那么问题来了？采用并行流的方式与使用CompletableFuture两个流水线的方式，在效率上差距很小，那么倒底使用哪一个呢？以下是建议：
+	// 如果是计算密集型用并行流，如果涉及需要等待的IO操作那么果断使用CompletableFuture两个流水线的方式！
 
 	public static void main(String[] args) {
 
