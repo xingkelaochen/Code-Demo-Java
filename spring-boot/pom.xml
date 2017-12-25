@@ -65,7 +65,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	<modules>
-		<module>spring-boot-data</module>
-	</modules>
 </project>
