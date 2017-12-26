@@ -7,6 +7,8 @@
  * 	1. 行为参数化(behavior)
  *  <br />
  *  2. 异步编程(CompletableFuture)
+ *  <br />
+ *  3. 流(Stream)
  * </p>
  * 
  * @author xingkelaochen

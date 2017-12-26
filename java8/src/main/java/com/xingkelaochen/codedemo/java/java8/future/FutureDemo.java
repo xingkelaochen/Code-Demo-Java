@@ -12,6 +12,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * 
@@ -596,7 +597,7 @@ public class FutureDemo {
 		// thenCombine的第二个参数，相当于给两个还未返回的结果添加了计算标识，当使用如join方法时才等待两个结果都返回时进行指定的运算。
 		
 		Optional<Integer> sum = valList.stream().map(f -> f.join()).reduce(Integer::sum);
-
+		
 		System.out.println(
 				"异步并行[muitMapByCompletableFutureCombine]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
 
@@ -604,33 +605,76 @@ public class FutureDemo {
 		
 		return sum.get() / loopCount;
 	}
+	
+	/**
+	 * 可以使用thenAccept指定方法，在CompletableFuture任务完成时进行结果的处理。并且CompletableFuture还提供了allOf、anyOf指定在一个CompletableFuture数组中全部完成/或者任何一个完成时的处理方法。<br />
+	 * 还是模拟进行两个参数的远程运算接口循环5次调用，当全部完成/或者任何一个完成后就打印结果。
+	 * @param a
+	 * @param b
+	 */
+	public void completion(int a, int b) {
+		
+		int loopCount = 5;
+
+		// 执行器可以设置线程池的大小，但也需要设置一个上限，防止服务器崩溃
+		Executor executor = Executors.newFixedThreadPool(Math.min(loopCount, 50), new ThreadFactory() {
+
+			@Override
+			public Thread newThread(Runnable arg0) {
+				Thread t = new Thread(arg0);
+				// 使用守护线程，保证程序退出可以一起关闭此线程
+				t.setDaemon(true);
+				return t;
+			}
+		});
+		
+		long init = System.currentTimeMillis();
+		
+		Stream<CompletableFuture<Integer>> stream = IntStream.rangeClosed(1, loopCount).boxed()
+				.map(x -> CompletableFuture.supplyAsync(() -> invokeService(a + "+" + b, "相加运算"), executor).thenCombine(
+						CompletableFuture.supplyAsync(() -> invokeService(a + "*" + b, "相乘运算"), executor), (c, d) -> c + d))
+				.collect(Collectors.toList()).stream();
+		
+		// 使用thenAccept方法标记流中的CompletableFuture对象完成后立即打印结果
+		CompletableFuture<Integer>[] arr = stream.map(f->f.thenAccept(s->System.out.println("thenAccept输出结果:"+s+" 耗时："+(System.currentTimeMillis()-init))))
+			.toArray(size->new CompletableFuture[size]);
+		
+		// CompletableFuture.allOf(arr).join();
+		// allOf当参数CompletableFuture数组中所有都完成后返回CompletableFuture<Void>，此处意为等待所有CompletableFuture对象返回，控制台将输出5次thenAccept中指定的输出语句
+		
+		CompletableFuture.anyOf(arr).join();
+		// anyOf将返回参数CompletableFuture数组中最快完成的对象（当然，如果有同时完成的thenAccept将执行多次，但只返回其中一个CompletableFuture<Object>对象）
+		
+	}
 
 	public static void main(String[] args) {
 
 		FutureDemo demo = new FutureDemo();
 
-		demo.syncProcess(4, 5);
-
-		demo.asyncProcessByFuture(4, 5);
-
-		demo.asyncProcessByCompletableFuture(4, 5);
-
-		demo.asyncProcessByCompletableFutureSupplyAsync(4, 5);
-
-		demo.syncProcessByStream(4, 5);
-
-		demo.asyncProcessByStream(4, 5);
-
-		demo.asyncProcessByCompletableFutureAndStream(4, 5);
-
-		demo.asyncProcessCompare(4, 5);
-
-		demo.withExecutor(4, 5);
-
-		demo.muitMap(4, 5);
-
-		demo.muitMapByCompletableFuture(4, 5);
-
-		demo.muitMapByCompletableFutureCombine(4, 5);
+//		demo.syncProcess(4, 5);
+//
+//		demo.asyncProcessByFuture(4, 5);
+//
+//		demo.asyncProcessByCompletableFuture(4, 5);
+//
+//		demo.asyncProcessByCompletableFutureSupplyAsync(4, 5);
+//
+//		demo.syncProcessByStream(4, 5);
+//
+//		demo.asyncProcessByStream(4, 5);
+//
+//		demo.asyncProcessByCompletableFutureAndStream(4, 5);
+//
+//		demo.asyncProcessCompare(4, 5);
+//
+//		demo.withExecutor(4, 5);
+//
+//		demo.muitMap(4, 5);
+//
+//		demo.muitMapByCompletableFuture(4, 5);
+//
+//		demo.muitMapByCompletableFutureCombine(4, 5);
+		
+		demo.completion(4, 5);
 	}
 }
