@@ -85,7 +85,7 @@ public class FutureDemo {
 	}
 
 	/**
-	 * 同样还是执行syncProcess方法中对于两个参数的相同操作，使用异步阻塞式的Future进行处理 <br />
+	 * 同样还是执行syncProcess方法中对于两个参数的相同操作，使用异步的Future进行处理 <br />
 	 * 在使用Future的异步并行模式下，虽然get方法在子线程还未返回的前提下会阻塞，但是可以在get方法前进行其他操作来合理利用子线程返回的等待时间
 	 * 
 	 * @param a
@@ -651,29 +651,29 @@ public class FutureDemo {
 
 		FutureDemo demo = new FutureDemo();
 
-//		demo.syncProcess(4, 5);
-//
-//		demo.asyncProcessByFuture(4, 5);
-//
-//		demo.asyncProcessByCompletableFuture(4, 5);
-//
-//		demo.asyncProcessByCompletableFutureSupplyAsync(4, 5);
-//
-//		demo.syncProcessByStream(4, 5);
-//
-//		demo.asyncProcessByStream(4, 5);
-//
-//		demo.asyncProcessByCompletableFutureAndStream(4, 5);
-//
-//		demo.asyncProcessCompare(4, 5);
-//
-//		demo.withExecutor(4, 5);
-//
-//		demo.muitMap(4, 5);
-//
-//		demo.muitMapByCompletableFuture(4, 5);
-//
-//		demo.muitMapByCompletableFutureCombine(4, 5);
+		demo.syncProcess(4, 5);
+
+		demo.asyncProcessByFuture(4, 5);
+
+		demo.asyncProcessByCompletableFuture(4, 5);
+
+		demo.asyncProcessByCompletableFutureSupplyAsync(4, 5);
+
+		demo.syncProcessByStream(4, 5);
+
+		demo.asyncProcessByStream(4, 5);
+
+		demo.asyncProcessByCompletableFutureAndStream(4, 5);
+
+		demo.asyncProcessCompare(4, 5);
+
+		demo.withExecutor(4, 5);
+
+		demo.muitMap(4, 5);
+
+		demo.muitMapByCompletableFuture(4, 5);
+
+		demo.muitMapByCompletableFutureCombine(4, 5);
 		
 		demo.completion(4, 5);
 	}
