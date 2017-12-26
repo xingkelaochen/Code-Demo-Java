@@ -18,7 +18,7 @@ import java.util.stream.IntStream;
  * 演示Future的用法
  * 
  * <p>
- * 调用模拟的远程服务存根{@link MockRemoteService}
+ * 模拟调用的远程服务存根{@link MockRemoteService}
  * </p>
  *
  * @author xingkelaochen
@@ -85,9 +85,7 @@ public class FutureDemo {
 
 	/**
 	 * 同样还是执行syncProcess方法中对于两个参数的相同操作，使用异步阻塞式的Future进行处理 <br />
-	 * 在使用Future的异步阻塞模式下，虽然get方法在子线程还未返回的前提下会阻塞，但是可以在get方法前进行其他操作来合理利用子线程返回的等待时间
-	 * <br />
-	 * 异步阻塞式：开启新线程进行服务访问，但调用者线程还是阻塞等待子线程的返回结果
+	 * 在使用Future的异步并行模式下，虽然get方法在子线程还未返回的前提下会阻塞，但是可以在get方法前进行其他操作来合理利用子线程返回的等待时间
 	 * 
 	 * @param a
 	 *            需要运算的a整数
@@ -95,7 +93,7 @@ public class FutureDemo {
 	 *            需要运算的b整数
 	 * @return 三次调用结果的平均值
 	 */
-	public int asyncBlockProcessByFuture(int a, int b) {
+	public int asyncProcessByFuture(int a, int b) {
 
 		try {
 			ExecutorService executoer = Executors.newCachedThreadPool();
@@ -148,7 +146,7 @@ public class FutureDemo {
 
 			int sum = result.get() + result2.get() + result3.get();
 
-			System.out.println("异步阻塞式[Future]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
+			System.out.println("异步并行[asyncProcessByFuture]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
 
 			// 可以看到，因为固定延时1秒的原因，异步方法基本在1秒完成
 
@@ -160,10 +158,9 @@ public class FutureDemo {
 	}
 
 	/**
-	 * 同样还是执行asyncBlockProcess方法中对于两个参数的相同操作，使用JDK1.8中新加入的CompletableFuture进行处理
-	 * <br />
-	 * CompletableFuture的get方法与Future一样，在得到返回结果前也会阻塞在调用线程中的get方法处，只是用法不同而已。 <br />
-	 * complete方法在子线程中将结果通知给CompletableFuturer；并且使用completeExceptionally也能将子线程中的异常传递回调用者，这时调用者将能在ExecutionException异常中获取具体信息
+	 * 同样还是执行asyncProcess方法中对于两个参数的相同操作，使用JDK1.8中新加入的CompletableFuture进行处理 <br />
+	 * CompletableFuture与Future一样，都可以使用get方法获取返回结果 <br />
+	 * 使用complete方法在子线程中将结果通知给CompletableFuturer；并且使用completeExceptionally也能将子线程中的异常传递回调用者，这时调用者将能在ExecutionException异常中获取具体信息
 	 * 
 	 * @param a
 	 *            需要运算的a整数
@@ -171,7 +168,7 @@ public class FutureDemo {
 	 *            需要运算的b整数
 	 * @return 三次调用结果的平均值
 	 */
-	public int asyncBlockProcessByCompletableFuture(int a, int b) {
+	public int asyncProcessByCompletableFuture(int a, int b) {
 
 		try {
 
@@ -226,7 +223,7 @@ public class FutureDemo {
 			int sum = result.get() + result2.get() + result3.get();
 
 			System.out.println(
-					"异步阻塞式[asyncBlockProcessByCompletableFuture]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
+					"异步并行[asyncProcessByCompletableFuture]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
 
 			// 可以看到，因为固定延时1秒的原因，异步方法基本在1秒完成
 
@@ -239,7 +236,7 @@ public class FutureDemo {
 	}
 
 	/**
-	 * 为了使asyncBlockProcessByCompletableFutureSupplyAsync中的supplyAsync看起来更简洁，并且为了使用Stream能够打印执行时间，封装了模拟远程服务调用方法，并且将异常标记为RuntimeException
+	 * 为了使asyncProcessByCompletableFutureSupplyAsync中的supplyAsync看起来更简洁，并且为了使用Stream能够打印执行时间，封装了模拟远程服务调用方法，并且将异常标记为RuntimeException
 	 * 
 	 * @param str
 	 *            运算表达式
@@ -253,7 +250,8 @@ public class FutureDemo {
 
 			int val = service.service(str);
 
-			System.out.println(logPrefix + "服务本次调用耗时：" + (System.currentTimeMillis() - now) + "毫秒");
+			System.out.println(Thread.currentThread().getName() + " " + logPrefix + "服务调用耗时："
+					+ (System.currentTimeMillis() - now) + "毫秒");
 			return val;
 		} catch (Exception ex) {
 			throw new RuntimeException("info");
@@ -271,7 +269,7 @@ public class FutureDemo {
 	 *            需要运算的b整数
 	 * @return 三次调用结果的平均值
 	 */
-	public int asyncBlockProcessByCompletableFutureSupplyAsync(int a, int b) {
+	public int asyncProcessByCompletableFutureSupplyAsync(int a, int b) {
 
 		try {
 			long init = System.currentTimeMillis();
@@ -289,10 +287,10 @@ public class FutureDemo {
 					.supplyAsync(() -> invokeService(a + "*" + b, "第三次同步"));
 
 			int sum = future.get() + future2.get() + future3.get();
-			System.out.println("异步阻塞式[asyncBlockProcessByCompletableFutureSupplyAsync]方法执行总耗时："
+			System.out.println("异步并行[asyncProcessByCompletableFutureSupplyAsync]方法执行总耗时："
 					+ (System.currentTimeMillis() - init) + "毫秒");
 
-			// 同样，这种异步阻塞式的调用方式，因为模拟固定延迟1秒，所以方法执行的总耗时也就比1秒多一点……
+			// 同样，这种异步并行的调用方式，因为模拟固定延迟1秒，所以方法执行的总耗时也就比1秒多一点……
 
 			return sum / 3;
 
@@ -321,7 +319,7 @@ public class FutureDemo {
 
 		int result = sum.getAsInt() / 3;
 
-		System.out.println("同步阻塞式[syncProcessByStream]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
+		System.out.println("同步[syncProcessByStream]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
 
 		// 因为同样是顺序阻塞，在每次模拟固定延迟1秒的情况下，依然需要3秒以上……
 
@@ -340,7 +338,7 @@ public class FutureDemo {
 	 *            需要运算的b整数
 	 * @return 三次调用结果的平均值
 	 */
-	public int asyncBlockProcessByStream(int a, int b) {
+	public int asyncProcessByStream(int a, int b) {
 
 		long init = System.currentTimeMillis();
 
@@ -351,9 +349,9 @@ public class FutureDemo {
 
 		int result = sum.get() / 3;
 
-		System.out.println("异步阻塞式[asyncBlockProcessByStream]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
+		System.out.println("异步并行[asyncProcessByStream]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
 
-		// 同样，这种使用并行流的异步阻塞式的调用方式，因为模拟固定延迟1秒，所以方法执行的总耗时也就1393毫秒
+		// 同样，这种使用并行流的异步并行的方式，因为模拟固定延迟1秒，所以方法执行的总耗时也就1393毫秒
 
 		return result;
 	}
@@ -370,7 +368,7 @@ public class FutureDemo {
 	 *            需要运算的b整数
 	 * @return 三次调用结果的平均值
 	 */
-	public int asyncBlockProcessByCompletableFutureAndStream(int a, int b) {
+	public int asyncProcessByCompletableFutureAndStream(int a, int b) {
 
 		long init = System.currentTimeMillis();
 
@@ -381,7 +379,7 @@ public class FutureDemo {
 		List<Integer> valList = futureList.stream().map(CompletableFuture::join).collect(Collectors.toList());
 
 		System.out.println(
-				"异步阻塞式[CompletableFutureSupplyAsyncAndStream]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
+				"异步并行[CompletableFutureSupplyAsyncAndStream]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
 
 		// 在模拟固定延迟1秒的前提下，使用CompletableFuture两个流水线的操作方式的总耗时1016毫秒，似乎比并行流快一点……
 
@@ -391,14 +389,16 @@ public class FutureDemo {
 
 	/**
 	 * 
-	 * 让我们把问题搞的稍微复杂一点，增加请求的次数，把使用parallelStream并行流，与使用CompletableFuture两个流水线做个对比
+	 * 让我们把问题搞的稍微复杂一点，增加请求的次数，把使用parallelStream并行流，与使用CompletableFuture两个流水线做个对比<br
+	 * />
+	 * 为了方便演示代码，此处都以 相加 运算为例
 	 * 
 	 * @param a
 	 *            需要运算的a整数
 	 * @param b
 	 *            需要运算的b整数
 	 */
-	public void asyncBlockProcessCompare(int a, int b) {
+	public void asyncProcessCompare(int a, int b) {
 
 		// 请求次数
 		int loopCount = 4;
@@ -410,8 +410,7 @@ public class FutureDemo {
 		Optional<Integer> sum = list.parallelStream().map((x) -> invokeService(a + "+" + b, "第" + x + "次异步"))
 				.reduce(Integer::sum);
 
-
-		System.out.println("异步阻塞式[asyncBlockProcessByStream]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
+		System.out.println("异步并行流方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
 
 		// 使用CompletableFuture两个流水线的处理方式
 		init = System.currentTimeMillis();
@@ -419,8 +418,8 @@ public class FutureDemo {
 				.map((x) -> CompletableFuture.supplyAsync(() -> invokeService(a + "+" + b, "第" + x + "次")))
 				.collect(Collectors.toList());
 
-		System.out.println("当前运行环境线程数：" + Runtime.getRuntime().availableProcessors()
-				+ "，异步阻塞式[CompletableFutureSupplyAsyncAndStream]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
+		System.out.println("当前运行环境线程数：" + Runtime.getRuntime().availableProcessors() + "，异步并行CompletableFuture方法执行总耗时："
+				+ (System.currentTimeMillis() - init) + "毫秒");
 
 		// 将请求参数loopCount为4，模拟延时依然1秒
 		// 并行流的方式总耗时1380毫秒，与3次基本无差别，似乎还快那么一丁点。
@@ -431,12 +430,13 @@ public class FutureDemo {
 		// 使用CompletableFuture的两个流水线方式明显比使用并行流的方式快
 
 		// 总结：这与当前运行环境的线程数有直接关系，试想若当前执行线程大于可用线程，当然要有线程需要等待，这样耗时自然会增加。
-		// 本示例Runtime.getRuntime().availableProcessors()的值为4，所以当第一个流水线使用CompletableFuture进行4次请求后，第二个流水线自然要等待线程释放，所以耗时才有所增加
+		// 本示例Runtime.getRuntime().availableProcessors()的值为4，所以当第一个流水线使用CompletableFuture进行4次请求后，第二个流水线自然要等待线程释放，所以耗时才会有相应的增加
 
 	}
 
 	/**
-	 * 上边的例子说明了并行任务与线程的关系，CompletableFuture可以自定义执行器的线程数，这样就可以按照业务进行合理的性能优化
+	 * 上边的例子说明了并行任务与线程的关系，CompletableFuture可以自定义执行器的线程数，这样就可以按照业务进行合理的性能优化<br />
+	 * 为了方便演示代码，此处都以 相加 运算为例
 	 * 
 	 * @param a
 	 *            需要运算的a整数
@@ -469,7 +469,7 @@ public class FutureDemo {
 		List<Integer> valList = futureList.stream().map(CompletableFuture::join).collect(Collectors.toList());
 
 		System.out.println("当前运行环境线程数：" + Runtime.getRuntime().availableProcessors()
-				+ "，异步阻塞式[CompletableFutureSupplyAsyncAndStream]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
+				+ "，异步并行[CompletableFutureSupplyAsyncAndStream]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
 
 		// 1秒固定模拟延时，按照前边使用通用线程数为4的情况推算，如果请求9次，那延迟最少需要3秒
 		// 但是现在神奇了,9次请求居然只用了1388毫秒，这已经很快了，不是吗？yeah~
@@ -478,9 +478,132 @@ public class FutureDemo {
 		return valList.stream().reduce(Integer::sum).get() / 9;
 
 	}
-	
+
 	// 那么问题来了？采用并行流的方式与使用CompletableFuture两个流水线的方式，在效率上差距很小，那么倒底使用哪一个呢？以下是建议：
 	// 如果是计算密集型用并行流，如果涉及需要等待的IO操作那么果断使用CompletableFuture两个流水线的方式！
+
+	/**
+	 * 
+	 * 在上边的方法中，三次的服务调用之间并没有依赖关系<br />
+	 * 如果需求是这样的，第一次调用服务进行两数相加，将结果减去1，第二次调用服务将计算将相减的结果再与第二个数相乘。<br />
+	 * 
+	 * @param a
+	 *            需要运算的a整数
+	 * @param b
+	 *            需要运算的b整数
+	 * @return 调用结果的平均值
+	 */
+	public int muitMap(int a, int b) {
+
+		int loopCount = 5;
+
+		long init = System.currentTimeMillis();
+
+		List<Integer> valList = IntStream.rangeClosed(1, loopCount).boxed().map((x) -> invokeService(a + "+" + b, ""))
+				.map((x) -> x - 1).map((x) -> invokeService(x + "*" + b, "")).collect(Collectors.toList());
+
+		System.out.println("同步[muitMapByStream]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
+
+		// 不出意外，5次循环，各调用2次固定延时为1秒的模拟服务，这种顺序阻塞式的方式肯定需要10秒以上，而实际确实是10424毫秒
+
+		return valList.stream().reduce(Integer::sum).get() / loopCount;
+	}
+
+	/**
+	 * 试试改用两个流水线，并且使用CompletableFuture并行异步的方式，它提供了针对异步调用依赖的支持
+	 * 
+	 * @param a
+	 *            需要运算的a整数
+	 * @param b
+	 *            需要运算的b整数
+	 * @return 调用结果的平均值
+	 */
+	public int muitMapByCompletableFuture(int a, int b) {
+
+		int loopCount = 5;
+
+		// 执行器可以设置线程池的大小，但也需要设置一个上限，防止服务器崩溃
+		Executor executor = Executors.newFixedThreadPool(Math.min(loopCount, 50), new ThreadFactory() {
+
+			@Override
+			public Thread newThread(Runnable arg0) {
+				Thread t = new Thread(arg0);
+				// 使用守护线程，保证程序退出可以一起关闭此线程
+				t.setDaemon(true);
+				return t;
+			}
+		});
+
+		long init = System.currentTimeMillis();
+
+		List<CompletableFuture<Integer>> valList = IntStream.rangeClosed(1, loopCount).boxed()
+				.map((x) -> CompletableFuture.supplyAsync(() -> invokeService(a + "+" + b, "相加运算"), executor))
+				.map(future -> future.thenApply(x -> x - 1))
+				.map(future -> future.thenCompose(
+						x -> CompletableFuture.supplyAsync(() -> invokeService(x + "*" + b, "相乘运算"), executor)))
+				.collect(Collectors.toList());
+
+		Optional<Integer> sum = valList.stream().map(f -> f.join()).reduce(Integer::sum);
+
+		System.out.println("异步并行[muitMapByCompletableFuture]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
+
+		// 总耗时2399毫秒，让我们来分析一下发生了什么：
+		// 1. 首先执行器executor允许同时进行5个线程
+		// 2. 使用CompletableFuture的supplyAsync工厂方法异步调用模拟的远程服务请求相加结果
+		// 3. 相加的结果减1，这种操作需要服务返回结果，而且不可能有大多的延时，可以待结果返回后直接执行。Completable的thenApply方法就会在supplyAsync返回结果后立即执行。
+		// 4. 第二次请求服务获取上述的结果与参数b的乘积结果，Completable的thenCompose允许对两个异步操作进行流水线，当第一个返回时将结果做为参数给第二次调用
+		// 两段分别5次共10次请求，每段并行执行5个线程的请求，在固定耗时1秒的前提下当然只需要2秒就能完成。
+		// thenComposeAsync方法提供thenCompose的并行实现，这将开启新的线程，本例由于第二次请求需要第一次的结果，所以没必要使用并行实现，况且这样还会增加使用线程的开销
+
+		return sum.get() / loopCount;
+	}
+
+	/**
+	 * 
+	 * 如果需求再次更改，第一次调用服务进行两参数相加，第二次调用服务将计算两个参数数相乘的结果，最后需要把两个结果相加。<br />
+	 * 这样两次请求没有前后依赖，就是要将两次异步请求的结果结合起来。同样使用两个流水线，其中thenCombine方法可以将前后两个CompletableFuture对象组合起来，第二个流水线获取组合的结果。
+	 * 
+	 * @param a
+	 *            需要运算的a整数
+	 * @param b
+	 *            需要运算的b整数
+	 * @return 调用结果的平均值
+	 */
+	public int muitMapByCompletableFutureCombine(int a, int b) {
+
+		int loopCount = 5;
+
+		// 执行器可以设置线程池的大小，但也需要设置一个上限，防止服务器崩溃
+		Executor executor = Executors.newFixedThreadPool(Math.min(loopCount, 50), new ThreadFactory() {
+
+			@Override
+			public Thread newThread(Runnable arg0) {
+				Thread t = new Thread(arg0);
+				// 使用守护线程，保证程序退出可以一起关闭此线程
+				t.setDaemon(true);
+				return t;
+			}
+		});
+		
+		long init = System.currentTimeMillis();
+
+		List<CompletableFuture<Integer>> valList = IntStream.rangeClosed(1, loopCount).boxed()
+				.map(x -> CompletableFuture.supplyAsync(() -> invokeService(a + "+" + b, "相加运算"), executor).thenCombine(
+						CompletableFuture.supplyAsync(() -> invokeService(a + "*" + b, "相乘运算"), executor), (c, d) -> c + d))
+				.collect(Collectors.toList());
+
+		// thenCombine将在本线程进行两个异步结果的相加运算，不需要使用thenCombineAsync开启新线程。
+		// thenCombine的第二个参数，相当于给两个还未返回的结果添加了计算标识，当使用如join方法时才等待两个结果都返回时进行指定的运算。
+		
+		Optional<Integer> sum = valList.stream().map(f -> f.join()).reduce(Integer::sum);
+
+		System.out.println(
+				"异步并行[muitMapByCompletableFutureCombine]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
+
+		// 总耗时2403毫秒，执行器允许同时进行5个线程，所以总耗时也如期待的一样
+		
+		return sum.get() / loopCount;
+	}
 
 	public static void main(String[] args) {
 
@@ -488,20 +611,26 @@ public class FutureDemo {
 
 		demo.syncProcess(4, 5);
 
-		demo.asyncBlockProcessByFuture(4, 5);
+		demo.asyncProcessByFuture(4, 5);
 
-		demo.asyncBlockProcessByCompletableFuture(4, 5);
+		demo.asyncProcessByCompletableFuture(4, 5);
 
-		demo.asyncBlockProcessByCompletableFutureSupplyAsync(4, 5);
+		demo.asyncProcessByCompletableFutureSupplyAsync(4, 5);
 
 		demo.syncProcessByStream(4, 5);
 
-		demo.asyncBlockProcessByStream(4, 5);
+		demo.asyncProcessByStream(4, 5);
 
-		demo.asyncBlockProcessByCompletableFutureAndStream(4, 5);
+		demo.asyncProcessByCompletableFutureAndStream(4, 5);
 
-		demo.asyncBlockProcessCompare(4, 5);
+		demo.asyncProcessCompare(4, 5);
 
 		demo.withExecutor(4, 5);
+
+		demo.muitMap(4, 5);
+
+		demo.muitMapByCompletableFuture(4, 5);
+
+		demo.muitMapByCompletableFutureCombine(4, 5);
 	}
 }
