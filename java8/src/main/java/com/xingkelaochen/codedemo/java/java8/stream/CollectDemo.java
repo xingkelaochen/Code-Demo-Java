@@ -1,6 +1,8 @@
+package com.xingkelaochen.codedemo.java.java8.stream;
 
 /**
- * Stream(流)的基本运用
+ * 
+ * Stream的collect收集操作
  *
  * @author xingkelaochen
  * 
@@ -11,4 +13,8 @@
  * </p>
  *
  */
-package com.xingkelaochen.codedemo.java.java8.stream.base;
+public class CollectDemo {
+
+	
+	
+}
