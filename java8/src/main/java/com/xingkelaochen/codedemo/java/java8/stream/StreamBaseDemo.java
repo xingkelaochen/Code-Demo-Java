@@ -218,6 +218,9 @@ public class StreamBaseDemo {
 		Map<String,List<User>> map = demoList.stream().collect(Collectors.groupingBy(User::getSex));
 	}
 	
+	/**
+	 * 构造流的方法
+	 */
 	public void createStream() {
 		
 		// 使用of方法构建一个Stream<User>流对象
