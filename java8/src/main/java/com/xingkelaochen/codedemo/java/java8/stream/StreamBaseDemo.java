@@ -60,7 +60,7 @@ public class StreamBaseDemo {
 	}
 
 	// 以下演示Stream的常用用法
-	
+
 	/**
 	 * Stream的筛选
 	 */
@@ -150,48 +150,48 @@ public class StreamBaseDemo {
 		demoList.stream().filter(user -> user.getAge() >= 30).findAny().ifPresent(System.out::println);
 
 		// Optional<User>如果不存在值，则使用orElse构造一个新的对象返回
-		System.out.println(demoList.stream().filter(user -> user.getAge() > 60).findAny().orElse(new User("李老头", 75, "男")));
+		System.out.println(
+				demoList.stream().filter(user -> user.getAge() > 60).findAny().orElse(new User("李老头", 75, "男")));
 
 		// findFirst用于返回流中第一个元素
 		System.out.println(demoList.stream().findFirst().get());
 		// findAny也是相同的作用，但findFirst如果用在并行流中的话限制太多
 	}
-	
+
 	/**
 	 * 针对Stream进行排序操作
 	 */
 	public void comparing() {
-		
+
 		// 使用Stream的sorted方法传入比较器对象，按照用户年龄进行排序，并返回排序后的列表
 		demoList.stream().map(User::getAge).sorted(new Comparator<Integer>() {
 
 			@Override
 			public int compare(Integer o1, Integer o2) {
-				if(o1<o2) {
+				if (o1 < o2) {
 					return -1;
-				}else if(o1>o2) {
+				} else if (o1 > o2) {
 					return 1;
-				}else {
+				} else {
 					return 0;
 				}
 			}
 		}).collect(Collectors.toList());
-		
+
 		/**
 		 * 利益于Comparator提供的新工厂方法comparing，还能更简单一点
 		 */
 		demoList.stream().sorted(Comparator.comparing(User::getAge)).collect(Collectors.toList());
-		
+
 		/**
 		 * Comparator的reversed方法作用是将排序进行逆序排列
 		 */
 		demoList.stream().sorted(Comparator.comparing(User::getAge).reversed()).collect(Collectors.toList());
-		
+
 	}
 
 	/**
-	 * Reduce归约是终端操作，它将生成流的最终结果
-	 * <br />
+	 * Reduce归约是终端操作，它将生成流的最终结果 <br />
 	 * Reduce接收一个BinaryOperator参数，函数描述符是(T-T)->T
 	 */
 	public void reduce() {
@@ -202,7 +202,8 @@ public class StreamBaseDemo {
 		// BinaryOperator<Integer>,将流中前后两个元素进行累加。
 		demoList.stream().map(User::getAge).reduce((u1, u2) -> u1 + u2).get();
 		// 上述方法没有初始值参数，因为可能流中没有任何数据，并且没有为其设置初始值，所以它返回的是一个Optional<Integer>
-		// 还能更简单，sum方法用于将流中的int元素进行累加，之所以还需要使用mapToInt是因为Stream<Integer>并不支持sum操作，所以需要将其特化为IntStream，这等同于reduce(0, Integer::sum)
+		// 还能更简单，sum方法用于将流中的int元素进行累加，之所以还需要使用mapToInt是因为Stream<Integer>并不支持sum操作，所以需要将其特化为IntStream，这等同于reduce(0,
+		// Integer::sum)
 		demoList.stream().mapToInt(User::getAge).sum();
 		// 特化流也可以使用boxed方法对元素进行装箱
 		Stream<Integer> stream = IntStream.rangeClosed(1, 3).boxed();
@@ -210,41 +211,41 @@ public class StreamBaseDemo {
 		// 最大值、最小值
 		demoList.stream().map(user -> user.getAge()).reduce(Integer::max);
 		demoList.stream().map(user -> user.getAge()).reduce(Integer::min);
-		
+
 		// 元素数量
 		demoList.stream().count();
-		
+
 		// 分组
-		Map<String,List<User>> map = demoList.stream().collect(Collectors.groupingBy(User::getSex));
+		Map<String, List<User>> map = demoList.stream().collect(Collectors.groupingBy(User::getSex));
 	}
-	
+
 	/**
 	 * 构造流的方法
 	 */
 	public void createStream() {
-		
+
 		// 使用of方法构建一个Stream<User>流对象
 		Stream<User> userStream = Stream.of(demoList.toArray(new User[] {}));
-		
+
 		// 构建空流
 		Stream<User> emptyStream = Stream.empty();
-		
+
 		// 由数组构建流
-		Stream<String> stringStream = Arrays.stream(new String[] {"a","b","c"});
-		
+		Stream<String> stringStream = Arrays.stream(new String[] { "a", "b", "c" });
+
 		try {
 			// 由文件获取Stream，lines方法流中的元素是文件中每一行的字符串
 			Files.lines(Paths.get("")).forEach(System.out::println);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		// 使用iterate生成无限流
-		Stream.iterate(0, n->n+1).limit(20).forEach(System.out::println);
-		Stream.iterate(new int[] {0,1}, n->new int[] {n[1],n[0]+n[1]}).limit(20).forEach(System.out::println);
-		
+		Stream.iterate(0, n -> n + 1).limit(20).forEach(System.out::println);
+		Stream.iterate(new int[] { 0, 1 }, n -> new int[] { n[1], n[0] + n[1] }).limit(20).forEach(System.out::println);
+
 		// generate也同样生成无限流，但与iterate不同，他接受一个Supplier参数用于生成元素
-		IntStream intStream = IntStream.generate(()->1);
+		IntStream intStream = IntStream.generate(() -> 1);
 	}
 
 	public static void main(String[] args) {

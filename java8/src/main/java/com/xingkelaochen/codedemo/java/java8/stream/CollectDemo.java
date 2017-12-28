@@ -78,46 +78,74 @@ public class CollectDemo {
 
 		// 分组
 		// 按性别属性简单分组
-		Map<String,List<User>> groupMap = demoList.stream().collect(groupingBy(User::getSex));
+		Map<String, List<User>> groupMap = demoList.stream().collect(groupingBy(User::getSex));
 		// 自定义分组实现
-		groupMap = demoList.stream().collect(groupingBy(u->{if(u.getSex().equals("男")) {return "男性";}else{return "女性";}}));
+		groupMap = demoList.stream().collect(groupingBy(u -> {
+			if (u.getSex().equals("男")) {
+				return "男性";
+			} else {
+				return "女性";
+			}
+		}));
 		// 多级分组，先用性别分，再以年龄进行自定义分组
-		Map<String,Map<String,List<User>>> muitGroupMap = demoList.stream().collect(groupingBy(User::getSex,groupingBy(u->{if(u.getAge()>20) {return "A";}else{return "B";}})));
+		Map<String, Map<String, List<User>>> muitGroupMap = demoList.stream()
+				.collect(groupingBy(User::getSex, groupingBy(u -> {
+					if (u.getAge() > 20) {
+						return "A";
+					} else {
+						return "B";
+					}
+				})));
 		// 分组统计个数
-		Map<String,Long> groupCount = demoList.stream().collect(groupingBy(User::getSex,counting()));
+		Map<String, Long> groupCount = demoList.stream().collect(groupingBy(User::getSex, counting()));
 		// 分组统计每个 性别年龄最大的。因为maxBy返回的是Optional对象，但其实在groupingBy中不会存在
-		Map<String,Optional<User>> map = demoList.stream().collect(groupingBy(User::getSex,maxBy(Comparator.comparing(User::getAge))));
+		Map<String, Optional<User>> map = demoList.stream()
+				.collect(groupingBy(User::getSex, maxBy(Comparator.comparing(User::getAge))));
 		// collectingAndThen用于将收集返回的结果转换为另一种类型，此例就将上例中无用的Optional对象直接调用其get方法进行转换
-		Map<String,User> map2 = demoList.stream().collect(groupingBy(User::getSex,collectingAndThen(maxBy(Comparator.comparing(User::getAge)),Optional::get)));
-		
+		Map<String, User> map2 = demoList.stream().collect(
+				groupingBy(User::getSex, collectingAndThen(maxBy(Comparator.comparing(User::getAge)), Optional::get)));
+
 		// 分区
 		// 分区是分组的特殊形式，授受Predicate谓词进行判定，返回Map<Boolean,List<T>>类型的对象
 		// 以是否男性为条件进行用户列表分区
-		Map<Boolean,List<User>> map3 = demoList.stream().collect(partitioningBy(u->{if(u.getSex().equals("男")) {return true;}else{return false;}}));
+		Map<Boolean, List<User>> map3 = demoList.stream().collect(partitioningBy(u -> {
+			if (u.getSex().equals("男")) {
+				return true;
+			} else {
+				return false;
+			}
+		}));
 		map3.get(true);
 		// 如果要获取男性用户列表，则上边的方式等同于下边使用filter的方式
-		demoList.stream().filter(u->u.getSex().equals("男")).collect(toList());
+		demoList.stream().filter(u -> u.getSex().equals("男")).collect(toList());
 		// 以是否男性分区，再以年龄分组
-		Map<Boolean,Map<Integer,List<User>>> map4 = demoList.stream().collect(partitioningBy(u->{if(u.getSex().equals("男")) {return true;}else{return false;}},groupingBy(User::getAge)));
+		Map<Boolean, Map<Integer, List<User>>> map4 = demoList.stream().collect(partitioningBy(u -> {
+			if (u.getSex().equals("男")) {
+				return true;
+			} else {
+				return false;
+			}
+		}, groupingBy(User::getAge)));
 	}
-	
+
 	/**
 	 * 使用自定义的Collector实现
 	 * 本例演示了一个类似于Collectos.toList()静态工厂方法的Collector实现类，虽然两者功能相同，但还是有所区别的
+	 * 
 	 * @see ToListCollector
 	 * 
 	 */
 	public void collectorInterface() {
-		
+
 		User[] arr = demoList.toArray(new User[] {});
-		
+
 		List<User> userList = Arrays.stream(arr).collect(new ToListCollector<User>());
-		
+
 		System.out.println(userList);
-		
+
 		// 当然也可以不用实现Collector的接口，直接在collect方法中定义
-		Arrays.stream(arr).collect(ArrayList::new,List::add,(list1,list2)->list1.addAll(list2));
-		
+		Arrays.stream(arr).collect(ArrayList::new, List::add, (list1, list2) -> list1.addAll(list2));
+
 	}
 
 	/**
@@ -125,10 +153,10 @@ public class CollectDemo {
 	 * 
 	 */
 	public void reduceOrCollect() {
-		
+
 		// 求用户年龄总计
-		int sum = demoList.stream().map(User::getAge).reduce((i,j)->i+j).orElse(0);
-		sum = demoList.stream().collect(reducing(0,User::getAge,(i,j)->i+j));
+		int sum = demoList.stream().map(User::getAge).reduce((i, j) -> i + j).orElse(0);
+		sum = demoList.stream().collect(reducing(0, User::getAge, (i, j) -> i + j));
 		sum = demoList.stream().collect(summingInt(User::getAge));
 		sum = demoList.stream().mapToInt(User::getAge).sum();
 
@@ -140,23 +168,24 @@ public class CollectDemo {
 			l1.addAll(l2);
 			return l2;
 		});
-		// 这种需求不得不使用reduce(List<User> identity, BiFunction<List<User>, ? super User, List<User>> accumulator, BinaryOperator<List<User>> combiner)方法
+		// 这种需求不得不使用reduce(List<User> identity, BiFunction<List<User>, ? super User,
+		// List<User>> accumulator, BinaryOperator<List<User>> combiner)方法
 		// 首先归约的初始值是一个空的List<User>列表
 		// 将每个元素包含进List<User>列表中返回
 		// 再将前一个List的值合并，最终返回总的List
 		// 而使用collect就很简单了
 		userList = demoList.stream().collect(Collectors.toList());
-		
+
 		// 函数式编程提供了一个需求的多种实现，应该尽可能使用简化特化的方式，比如mapToInt(ToIntFunction).sum()
 		// 当然这两种方式还有其他区别，比如在并行计算上，详细看Collector的自定义实现中characteristics()
 
 	}
 
 	public static void main(String[] args) {
-		
+
 		CollectDemo demo = new CollectDemo();
-		
+
 		demo.collectorInterface();
 	}
-	
+
 }
