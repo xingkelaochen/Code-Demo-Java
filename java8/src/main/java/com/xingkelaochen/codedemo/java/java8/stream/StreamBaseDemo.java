@@ -202,8 +202,7 @@ public class StreamBaseDemo {
 		// BinaryOperator<Integer>,将流中前后两个元素进行累加。
 		demoList.stream().map(User::getAge).reduce((u1, u2) -> u1 + u2).get();
 		// 上述方法没有初始值参数，因为可能流中没有任何数据，并且没有为其设置初始值，所以它返回的是一个Optional<Integer>
-		// 还能更简单，sum方法用于将流中的int元素进行累加，之所以还需要使用mapToInt是因为Stream<Integer>并不支持sum操作，所以需要将其特化为IntStream，这等同于reduce(0,
-		// Integer::sum)
+		// 还能更简单，sum方法用于将流中的int元素进行累加，之所以还需要使用mapToInt是因为Stream<Integer>并不支持sum操作，所以需要将其特化为IntStream，这等同于reduce(0,Integer::sum)
 		demoList.stream().mapToInt(User::getAge).sum();
 		// 特化流也可以使用boxed方法对元素进行装箱
 		Stream<Integer> stream = IntStream.rangeClosed(1, 3).boxed();

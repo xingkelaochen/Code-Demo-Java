@@ -314,8 +314,8 @@ public class FutureDemo {
 	public int syncProcessByStream(int a, int b) {
 
 		long init = System.currentTimeMillis();
-
-		OptionalInt sum = IntStream.rangeClosed(1, 3).map((x) -> invokeService(a + "+" + b, "第" + x + "次同步"))
+		
+		OptionalInt sum = Stream.iterate(1,n->n+1).limit(3).map((x) -> invokeService(a + "+" + b, "第" + x + "次同步")).mapToInt(x->x.intValue())
 				.reduce(Integer::sum);
 
 		int result = sum.getAsInt() / 3;
@@ -343,16 +343,14 @@ public class FutureDemo {
 
 		long init = System.currentTimeMillis();
 
-		List<Integer> list = IntStream.rangeClosed(1, 3).boxed().collect(Collectors.toList());
-
-		Optional<Integer> sum = list.parallelStream().map((x) -> invokeService(a + "+" + b, "第" + x + "次异步"))
+		Optional<Integer> sum = Stream.iterate(1,n->n+1).limit(3).parallel().map((x) -> invokeService(a + "+" + b, "第" + x + "次异步"))
 				.reduce(Integer::sum);
 
 		int result = sum.get() / 3;
 
 		System.out.println("异步并行[asyncProcessByStream]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
 
-		// 同样，这种使用并行流的异步并行的方式，因为模拟固定延迟1秒，所以方法执行的总耗时也就1393毫秒
+		// 同样，这种使用并行流的异步并行的方式，因为模拟固定延迟1秒，所以方法执行的总耗时也就1383毫秒
 
 		return result;
 	}
@@ -373,7 +371,7 @@ public class FutureDemo {
 
 		long init = System.currentTimeMillis();
 
-		List<CompletableFuture<Integer>> futureList = IntStream.rangeClosed(1, 3).boxed()
+		List<CompletableFuture<Integer>> futureList = Stream.iterate(1,n->n+1).limit(3)
 				.map((x) -> CompletableFuture.supplyAsync(() -> invokeService(a + "+" + b, "第" + x + "次")))
 				.collect(Collectors.toList());
 
@@ -382,7 +380,7 @@ public class FutureDemo {
 		System.out.println(
 				"异步并行[CompletableFutureSupplyAsyncAndStream]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
 
-		// 在模拟固定延迟1秒的前提下，使用CompletableFuture两个流水线的操作方式的总耗时1016毫秒，似乎比并行流快一点……
+		// 在模拟固定延迟1秒的前提下，使用CompletableFuture两个流水线的操作方式的总耗时1376毫秒，似乎比并行流快一点……
 
 		return valList.stream().reduce(Integer::sum).get() / 3;
 
@@ -390,8 +388,7 @@ public class FutureDemo {
 
 	/**
 	 * 
-	 * 让我们把问题搞的稍微复杂一点，增加请求的次数，把使用parallelStream并行流，与使用CompletableFuture两个流水线做个对比<br
-	 * />
+	 * 让我们把问题搞的稍微复杂一点，增加请求的次数，把使用parallelStream并行流，与使用CompletableFuture两个流水线做个对比<br />
 	 * 为了方便演示代码，此处都以 相加 运算为例
 	 * 
 	 * @param a
@@ -406,28 +403,26 @@ public class FutureDemo {
 
 		// 使用parallelStream并行流的处理方式
 		long init = System.currentTimeMillis();
-		List<Integer> list = IntStream.rangeClosed(1, loopCount).boxed().collect(Collectors.toList());
-
-		Optional<Integer> sum = list.parallelStream().map((x) -> invokeService(a + "+" + b, "第" + x + "次异步"))
+		Optional<Integer> sum = Stream.iterate(1,n->n+1).limit(loopCount).parallel().map((x) -> invokeService(a + "+" + b, "第" + x + "次异步"))
 				.reduce(Integer::sum);
 
 		System.out.println("异步并行流方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
 
 		// 使用CompletableFuture两个流水线的处理方式
 		init = System.currentTimeMillis();
-		List<CompletableFuture<Integer>> futureList = IntStream.rangeClosed(1, loopCount).boxed()
+		List<CompletableFuture<Integer>> futureList = Stream.iterate(0,n->n+1).limit(loopCount)
 				.map((x) -> CompletableFuture.supplyAsync(() -> invokeService(a + "+" + b, "第" + x + "次")))
 				.collect(Collectors.toList());
-
+		List<Integer> valList = futureList.stream().map(CompletableFuture::join).collect(Collectors.toList());
 		System.out.println("当前运行环境线程数：" + Runtime.getRuntime().availableProcessors() + "，异步并行CompletableFuture方法执行总耗时："
 				+ (System.currentTimeMillis() - init) + "毫秒");
 
 		// 将请求参数loopCount为4，模拟延时依然1秒
-		// 并行流的方式总耗时1380毫秒，与3次基本无差别，似乎还快那么一丁点。
+		// 并行流的方式总耗时1376毫秒，与3次基本无差别，似乎还快那么一丁点。
 		// 可是使用CompletableFuture的两个流水线方式，耗时竟然高达2017毫秒，郁闷了吗？
 
 		// 将请求参数loopCount再次改为5
-		// 并行流的方式总耗时2394毫秒，使用CompletableFuture的两个流水线方式总耗时2020毫秒。
+		// 并行流的方式总耗时2382毫秒，使用CompletableFuture的两个流水线方式总耗时2022毫秒。
 		// 使用CompletableFuture的两个流水线方式明显比使用并行流的方式快
 
 		// 总结：这与当前运行环境的线程数有直接关系，试想若当前执行线程大于可用线程，当然要有线程需要等待，这样耗时自然会增加。
@@ -463,7 +458,7 @@ public class FutureDemo {
 
 		// 使用CompletableFuture两个流水线的处理方式
 		long init = System.currentTimeMillis();
-		List<CompletableFuture<Integer>> futureList = IntStream.rangeClosed(1, loopCount).boxed()
+		List<CompletableFuture<Integer>> futureList = Stream.iterate(0,n->n+1).limit(loopCount)
 				.map((x) -> CompletableFuture.supplyAsync(() -> invokeService(a + "+" + b, "第" + x + "次"), executor))
 				.collect(Collectors.toList());
 
@@ -473,7 +468,7 @@ public class FutureDemo {
 				+ "，异步并行[CompletableFutureSupplyAsyncAndStream]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
 
 		// 1秒固定模拟延时，按照前边使用通用线程数为4的情况推算，如果请求9次，那延迟最少需要3秒
-		// 但是现在神奇了,9次请求居然只用了1388毫秒，这已经很快了，不是吗？yeah~
+		// 但是现在神奇了,9次请求居然只用了1376毫秒，这已经很快了，不是吗？yeah~
 		// 问题：如果第一个请求远程服务的流换成parallelStream并行流，效率会不会更好一点？其实不见得，supplyAsync方法已经是异步的，效率不会提升而且新开的线程还可能会消耗性能。
 
 		return valList.stream().reduce(Integer::sum).get() / 9;
@@ -500,7 +495,7 @@ public class FutureDemo {
 
 		long init = System.currentTimeMillis();
 
-		List<Integer> valList = IntStream.rangeClosed(1, loopCount).boxed().map((x) -> invokeService(a + "+" + b, ""))
+		List<Integer> valList = Stream.iterate(0,n->n+1).limit(loopCount).map((x) -> invokeService(a + "+" + b, ""))
 				.map((x) -> x - 1).map((x) -> invokeService(x + "*" + b, "")).collect(Collectors.toList());
 
 		System.out.println("同步[muitMapByStream]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
@@ -537,7 +532,7 @@ public class FutureDemo {
 
 		long init = System.currentTimeMillis();
 
-		List<CompletableFuture<Integer>> valList = IntStream.rangeClosed(1, loopCount).boxed()
+		List<CompletableFuture<Integer>> valList = Stream.iterate(0,n->n+1).limit(loopCount)
 				.map((x) -> CompletableFuture.supplyAsync(() -> invokeService(a + "+" + b, "相加运算"), executor))
 				.map(future -> future.thenApply(x -> x - 1))
 				.map(future -> future.thenCompose(
@@ -588,7 +583,7 @@ public class FutureDemo {
 		
 		long init = System.currentTimeMillis();
 
-		List<CompletableFuture<Integer>> valList = IntStream.rangeClosed(1, loopCount).boxed()
+		List<CompletableFuture<Integer>> valList = Stream.iterate(0,n->n+1).limit(loopCount)
 				.map(x -> CompletableFuture.supplyAsync(() -> invokeService(a + "+" + b, "相加运算"), executor).thenCombine(
 						CompletableFuture.supplyAsync(() -> invokeService(a + "*" + b, "相乘运算"), executor), (c, d) -> c + d))
 				.collect(Collectors.toList());
@@ -601,7 +596,7 @@ public class FutureDemo {
 		System.out.println(
 				"异步并行[muitMapByCompletableFutureCombine]方法执行总耗时：" + (System.currentTimeMillis() - init) + "毫秒");
 
-		// 总耗时2403毫秒，执行器允许同时进行5个线程，所以总耗时也如期待的一样
+		// 总耗时2378毫秒，执行器允许同时进行5个线程，所以总耗时也如期待的一样(因为两次操作会开启10个线程)
 		
 		return sum.get() / loopCount;
 	}
@@ -630,7 +625,7 @@ public class FutureDemo {
 		
 		long init = System.currentTimeMillis();
 		
-		Stream<CompletableFuture<Integer>> stream = IntStream.rangeClosed(1, loopCount).boxed()
+		Stream<CompletableFuture<Integer>> stream = Stream.iterate(0,n->n+1).limit(loopCount)
 				.map(x -> CompletableFuture.supplyAsync(() -> invokeService(a + "+" + b, "相加运算"), executor).thenCombine(
 						CompletableFuture.supplyAsync(() -> invokeService(a + "*" + b, "相乘运算"), executor), (c, d) -> c + d))
 				.collect(Collectors.toList()).stream();
@@ -651,30 +646,30 @@ public class FutureDemo {
 
 		FutureDemo demo = new FutureDemo();
 
-		demo.syncProcess(4, 5);
-
-		demo.asyncProcessByFuture(4, 5);
-
-		demo.asyncProcessByCompletableFuture(4, 5);
-
-		demo.asyncProcessByCompletableFutureSupplyAsync(4, 5);
-
-		demo.syncProcessByStream(4, 5);
-
-		demo.asyncProcessByStream(4, 5);
-
-		demo.asyncProcessByCompletableFutureAndStream(4, 5);
-
-		demo.asyncProcessCompare(4, 5);
-
-		demo.withExecutor(4, 5);
-
-		demo.muitMap(4, 5);
-
-		demo.muitMapByCompletableFuture(4, 5);
+//		demo.syncProcess(4, 5);
+//
+//		demo.asyncProcessByFuture(4, 5);
+//
+//		demo.asyncProcessByCompletableFuture(4, 5);
+//
+//		demo.asyncProcessByCompletableFutureSupplyAsync(4, 5);
+//
+//		demo.syncProcessByStream(4, 5);
+//
+//		demo.asyncProcessByStream(4, 5);
+//
+//		demo.asyncProcessByCompletableFutureAndStream(4, 5);
+//
+//		demo.asyncProcessCompare(4, 5);
+//
+//		demo.withExecutor(4, 5);
+//
+//		demo.muitMap(4, 5);
+//
+//		demo.muitMapByCompletableFuture(4, 5);
 
 		demo.muitMapByCompletableFutureCombine(4, 5);
 		
-		demo.completion(4, 5);
+//		demo.completion(4, 5);
 	}
 }
