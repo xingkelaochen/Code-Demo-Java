@@ -646,30 +646,30 @@ public class FutureDemo {
 
 		FutureDemo demo = new FutureDemo();
 
-//		demo.syncProcess(4, 5);
-//
-//		demo.asyncProcessByFuture(4, 5);
-//
-//		demo.asyncProcessByCompletableFuture(4, 5);
-//
-//		demo.asyncProcessByCompletableFutureSupplyAsync(4, 5);
-//
-//		demo.syncProcessByStream(4, 5);
-//
-//		demo.asyncProcessByStream(4, 5);
-//
-//		demo.asyncProcessByCompletableFutureAndStream(4, 5);
-//
-//		demo.asyncProcessCompare(4, 5);
-//
-//		demo.withExecutor(4, 5);
-//
-//		demo.muitMap(4, 5);
-//
-//		demo.muitMapByCompletableFuture(4, 5);
+		demo.syncProcess(4, 5);
+
+		demo.asyncProcessByFuture(4, 5);
+
+		demo.asyncProcessByCompletableFuture(4, 5);
+
+		demo.asyncProcessByCompletableFutureSupplyAsync(4, 5);
+
+		demo.syncProcessByStream(4, 5);
+
+		demo.asyncProcessByStream(4, 5);
+
+		demo.asyncProcessByCompletableFutureAndStream(4, 5);
+
+		demo.asyncProcessCompare(4, 5);
+
+		demo.withExecutor(4, 5);
+
+		demo.muitMap(4, 5);
+
+		demo.muitMapByCompletableFuture(4, 5);
 
 		demo.muitMapByCompletableFutureCombine(4, 5);
 		
-//		demo.completion(4, 5);
+		demo.completion(4, 5);
 	}
 }
