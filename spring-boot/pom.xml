@@ -13,24 +13,35 @@
 	<url>http://www.xingkelaochen.com</url>
 	<description>SpringBoot代码演示</description>
 
+	<properties>
+		<spring.version>2.0.0.BUILD-SNAPSHOT</spring.version>
+	</properties>
+
+	<!-- 使用以下配置方式，指定spring boot的依赖管理 。这样解决了两个问题：1.本项目可以继承其它项目；2.本项目的子模块可以继承本项目；3.本项目的spring 
+		boot起步依赖不需要再指定版本号 -->
+	<!-- 等同于以下继承方式 <parent> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-parent</artifactId> 
+		<version>2.0.0.BUILD-SNAPSHOT</version> </parent> -->
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
 				<!-- Import dependency management from Spring Boot -->
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-dependencies</artifactId>
-				<version>2.0.0.BUILD-SNAPSHOT</version>
+				<version>${spring.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
+	<!-- 本例将使用Spring Boot 的 2.0.0.BUILD-SNAPSHOT 快照版本，所以引入spring的快照版本库 -->
 	<repositories>
 		<repository>
 			<id>spring-snapshots</id>
 			<url>http://repo.spring.io/snapshot</url>
-			<snapshots><enabled>true</enabled></snapshots>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
 		</repository>
 		<repository>
 			<id>spring-milestones</id>
@@ -47,7 +58,7 @@
 			<url>http://repo.spring.io/milestone</url>
 		</pluginRepository>
 	</pluginRepositories>
-	
+
 	<build>
 		<plugins>
 			<plugin>
@@ -59,10 +70,26 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			<!-- 
+				在IDE中直接执行程序入口main方法，使用Application.run启动Spring Boot应用是简单的事情，因为IDE会关联所有依赖。
+				如果要将应用打包成jar文件，那么需要使用spring-boot-maven-plugin插件， 当maven打包时会将所有依赖打成FatJar（UberJar）。
+				因为spring-boot-starter-parent包含了<executions> 配置并将其绑定在repackage的goal，所以如果没有使用Spring Boot的parent pom方式，则需要在此申明插件绑定的阶段目标。
+			-->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
+
+	<modules>
+		<module>spring-boot-guide</module>
+	</modules>
 </project>

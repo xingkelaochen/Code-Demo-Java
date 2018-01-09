@@ -1,0 +1,54 @@
+# Spring Boot默认读取application.properties或者application.yml文件中的配置项
+# 默认会在以下路径中加载配置文件：
+#   1. 当前路径的/config子目录下
+#   2. 当前目录
+#   3. classpath的/config子目录下
+#   4. classpath根目录下
+# 如果配置文件的名称不为application，则可以使用spring.config.name指定其文件名称；或者使用spring.config.location指定具体文件路径
+
+
+# 不同的profile指定的环境，配置文件默认加载application-{profile}.properties的约定名称
+
+# 在代码中，属性可以使用@Value("${name}")注解绑定设置的值，而在配置文件中可以使用${name}进行互相引用
+
+# 在类中可以使用@ConfigurationProperties("")注解，将属性绑定到对应的对象中。对应的类参见com.xingkelaochen.codedemo.springboot.guide.configuration.MyServersConfigurationList
+my: 
+  servers:
+    - dev.example.com
+    - test.example.com
+# 上述配置在properties文件中可以写成：
+# my.servers[0]=dev.example.com
+# my.servers[1]=test.example.com
+
+  info:
+    name: xingkelaochen
+    sex: 男
+    
+    
+# 指定运行环境
+spring:
+  profiles:
+    active: dev
+  mvc:
+    # 指定静态文件匹配路径，默认路径为/static (or /public or /resources or /META-INF/resources)，使其请求不通过DispatcherServlet
+    static-path-pattern: 
+  datasource:
+    url: jdbc:h2:mem:test
+    driver-class-name: org.h2.Driver
+    username: root
+    password: 123456
+    
+# 开启debug模式，将输出调试日志
+debug: true
+
+# 在当前目录下生成指定名称的日志文件
+logging:
+  file: dev.log
+  # 在指定目录下生成spring.log日志文件
+  path: d:/dev/log
+  
+  level:
+    # 指定默认日志级别为WARN
+    root: WARN
+    # 指定包的日志级别
+    org.springframework: DEBUG
