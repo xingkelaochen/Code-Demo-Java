@@ -168,8 +168,7 @@ public class CollectDemo {
 			l1.addAll(l2);
 			return l2;
 		});
-		// 这种需求不得不使用reduce(List<User> identity, BiFunction<List<User>, ? super User,
-		// List<User>> accumulator, BinaryOperator<List<User>> combiner)方法
+		// 这种需求不得不使用reduce(List<User> identity, BiFunction<List<User>, ? super User,List<User>> accumulator, BinaryOperator<List<User>> combiner)方法
 		// 首先归约的初始值是一个空的List<User>列表
 		// 将每个元素包含进List<User>列表中返回
 		// 再将前一个List的值合并，最终返回总的List

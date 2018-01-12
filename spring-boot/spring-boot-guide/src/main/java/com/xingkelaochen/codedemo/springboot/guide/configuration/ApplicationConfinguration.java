@@ -3,6 +3,9 @@ package com.xingkelaochen.codedemo.springboot.guide.configuration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+import com.xingkelaochen.codedemo.springboot.guide.data.custom.MyBaseRepositoryFactoryBean;
 
 /**
  * 
@@ -19,6 +22,8 @@ import org.springframework.context.annotation.Profile;
  */
 @Configuration
 @Profile(value="dev")
+// 指定自定义实现的RepositoryFactoryBean，详见MyBaseRepositoryFactoryBean
+@EnableJpaRepositories(repositoryFactoryBeanClass=MyBaseRepositoryFactoryBean.class)
 public class ApplicationConfinguration {
 
 	/**

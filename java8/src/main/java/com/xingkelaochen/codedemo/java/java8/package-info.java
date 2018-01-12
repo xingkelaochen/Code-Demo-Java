@@ -9,6 +9,8 @@
  *  2. 异步编程(CompletableFuture)
  *  <br />
  *  3. 流(Stream)
+ *  <br />
+ *  4. 接口默认方法(defalut in interface)
  * </p>
  * 
  * @author xingkelaochen

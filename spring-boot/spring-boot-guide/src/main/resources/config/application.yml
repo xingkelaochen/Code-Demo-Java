@@ -44,11 +44,20 @@ debug: true
 # 在当前目录下生成指定名称的日志文件
 logging:
   file: dev.log
-  # 在指定目录下生成spring.log日志文件
-  path: d:/dev/log
+  # 在指定目录下生成spring.log日志文件，若有file属性则自动忽略此配置
+  # path: d:/dev/log
   
   level:
     # 指定默认日志级别为WARN
     root: WARN
     # 指定包的日志级别
     org.springframework: DEBUG
+    
+    
+# 内嵌应用服务器的相关配置，也可以实现WebServerFactoryCustomizer<ConfigurableServletWebServerFactory>类进行定制化
+server:
+  port: 8080
+  address: 
+  session:
+    timeout:
+      
