@@ -6,14 +6,15 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolver;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
  * 自定义错误页面解析
  * 
  * <p>
- * 	默认的，如果controller抛出异常，异常处理解析器会在静态目录下寻找与httpStatus相对应的error/xxx.html页面
- * （如果使用freemarker模板，则在templates/error/下寻找）用于异常响应的显示，但是也可以通过重写resolveErrorView进行定制化。
+ * 	默认的，如果controller抛出异常，异常处理解析器会先在静态目录下寻找与httpStatus相对应的error/xxx.html页面（如果使用模板，则在templates/error/下寻找）用于异常响应的显示。
+ *  但是也可以通过重写resolveErrorView进行定制化。
  * </p>
  *
  *
@@ -26,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
  * </p>
  *
  */
+@Component
 public class CustomErrorViewResolver implements ErrorViewResolver {
 
 	@Override
@@ -36,7 +38,9 @@ public class CustomErrorViewResolver implements ErrorViewResolver {
 		if(status.value()==HttpStatus.NOT_FOUND.value()) {
 			// 如果错误代码为404，则跳转到指定的路径
 			
-			modelAndView.setViewName("redirect:/index");
+			modelAndView.addObject("info", "exception: "+status.value());
+			modelAndView.setViewName("error/exception");
+			modelAndView.setStatus(status);
 		}
 		
 		return modelAndView;

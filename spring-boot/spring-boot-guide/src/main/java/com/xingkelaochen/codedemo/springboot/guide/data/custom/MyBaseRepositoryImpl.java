@@ -7,10 +7,15 @@ import java.lang.reflect.Method;
 
 import javax.persistence.EntityManager;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
+import org.springframework.data.repository.NoRepositoryBean;
 
 /**
  * 实现自定义的MyBaseRepository接口
+ * 在@Configuration配置类使用@EnableJpaRepositories(repositoryBaseClass = MyBaseRepositoryImpl.class)指定全局JpaRepository使用此扩展实现
  *
  *
  * @author xingkelaochen
@@ -24,13 +29,14 @@ import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
  * @param <T>
  * @param <ID>
  */
+@NoRepositoryBean
 public class MyBaseRepositoryImpl<T, ID extends Serializable> extends SimpleJpaRepository<T, ID> implements MyBaseRepository<T, ID> {
 
 	private EntityManager em;
 	
-	public MyBaseRepositoryImpl(Class<T> domainClass, EntityManager em) {
-		super(domainClass, em);
-		this.em = em;
+	public MyBaseRepositoryImpl(JpaEntityInformation<T, ?> entityInformation, EntityManager entityManager) {
+		super(entityInformation, entityManager);
+		this.em = entityManager;
 	}
 
 	@Override
@@ -52,8 +58,7 @@ public class MyBaseRepositoryImpl<T, ID extends Serializable> extends SimpleJpaR
 	}
 
 	@Override
-	public T diable(T t) throws Exception {
-		BeanInfo bean = Introspector.getBeanInfo(t.getClass());
+	public T disable(T t) throws Exception {
 		
 		Method setEnabled = t.getClass().getMethod("setEnabled", null);
 		

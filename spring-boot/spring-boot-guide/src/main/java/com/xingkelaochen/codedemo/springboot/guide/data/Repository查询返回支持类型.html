@@ -1,0 +1,247 @@
+<html>
+<head>
+<title>Repository查询返回支持类型</title>
+</head>
+<body>
+	<table class="tableblock frame-all grid-all spread">
+		<caption class="title">Table 11. Query return types</caption>
+		<colgroup>
+			<col style="width: 25%;">
+			<col style="width: 75%;">
+		</colgroup>
+		<thead>
+			<tr>
+				<th class="tableblock halign-left valign-top">Return type</th>
+				<th class="tableblock halign-left valign-top">Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						<code>void</code>
+					</p></td>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">Denotes no return value.</p></td>
+			</tr>
+			<tr>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">Primitives</p></td>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">Java primitives.</p></td>
+			</tr>
+			<tr>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">Wrapper types</p></td>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">Java wrapper types.</p></td>
+			</tr>
+			<tr>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						<code>T</code>
+					</p></td>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						An unique entity. Expects the query method to return one result at
+						most. In case no result is found
+						<code>null</code>
+						is returned. More than one result will trigger an
+						<code>IncorrectResultSizeDataAccessException</code>
+						.
+					</p></td>
+			</tr>
+			<tr>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						<code>Iterator&lt;T&gt;</code>
+					</p></td>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						An
+						<code>Iterator</code>
+						.
+					</p></td>
+			</tr>
+			<tr>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						<code>Collection&lt;T&gt;</code>
+					</p></td>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						A
+						<code>Collection</code>
+						.
+					</p></td>
+			</tr>
+			<tr>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						<code>List&lt;T&gt;</code>
+					</p></td>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						A
+						<code>List</code>
+						.
+					</p></td>
+			</tr>
+			<tr>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						<code>Optional&lt;T&gt;</code>
+					</p></td>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						A Java 8 or Guava
+						<code>Optional</code>
+						. Expects the query method to return one result at most. In case
+						no result is found
+						<code>Optional.empty()</code>
+						/
+						<code>Optional.absent()</code>
+						is returned. More than one result will trigger an
+						<code>IncorrectResultSizeDataAccessException</code>
+						.
+					</p></td>
+			</tr>
+			<tr>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						<code>Option&lt;T&gt;</code>
+					</p></td>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						An either Scala or JavaSlang
+						<code>Option</code>
+						type. Semantically same behavior as Java 8’s
+						<code>Optional</code>
+						described above.
+					</p></td>
+			</tr>
+			<tr>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						<code>Stream&lt;T&gt;</code>
+					</p></td>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						A Java 8
+						<code>Stream</code>
+						.
+					</p></td>
+			</tr>
+			<tr>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						<code>Future&lt;T&gt;</code>
+					</p></td>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						A
+						<code>Future</code>
+						. Expects method to be annotated with
+						<code>@Async</code>
+						and requires Spring’s asynchronous method execution capability
+						enabled.
+					</p></td>
+			</tr>
+			<tr>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						<code>CompletableFuture&lt;T&gt;</code>
+					</p></td>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						A Java 8
+						<code>CompletableFuture</code>
+						. Expects method to be annotated with
+						<code>@Async</code>
+						and requires Spring’s asynchronous method execution capability
+						enabled.
+					</p></td>
+			</tr>
+			<tr>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						<code>ListenableFuture</code>
+					</p></td>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						A
+						<code>org.springframework.util.concurrent.ListenableFuture</code>
+						. Expects method to be annotated with
+						<code>@Async</code>
+						and requires Spring’s asynchronous method execution capability
+						enabled.
+					</p></td>
+			</tr>
+			<tr>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						<code>Slice</code>
+					</p></td>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						A sized chunk of data with information whether there is more data
+						available. Requires a
+						<code>Pageable</code>
+						method parameter.
+					</p></td>
+			</tr>
+			<tr>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						<code>Page&lt;T&gt;</code>
+					</p></td>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						A
+						<code>Slice</code>
+						with additional information, e.g. the total number of results.
+						Requires a
+						<code>Pageable</code>
+						method parameter.
+					</p></td>
+			</tr>
+			<tr>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						<code>GeoResult&lt;T&gt;</code>
+					</p></td>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">A result entry with additional information,
+						e.g. distance to a reference location.</p></td>
+			</tr>
+			<tr>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						<code>GeoResults&lt;T&gt;</code>
+					</p></td>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						A list of
+						<code>GeoResult&lt;T&gt;</code>
+						with additional information, e.g. average distance to a reference
+						location.
+					</p></td>
+			</tr>
+			<tr>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						<code>GeoPage&lt;T&gt;</code>
+					</p></td>
+				<td class="tableblock halign-left valign-top"><p
+						class="tableblock">
+						A
+						<code>Page</code>
+						with
+						<code>GeoResult&lt;T&gt;</code>
+						, e.g. average distance to a reference location.
+					</p></td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

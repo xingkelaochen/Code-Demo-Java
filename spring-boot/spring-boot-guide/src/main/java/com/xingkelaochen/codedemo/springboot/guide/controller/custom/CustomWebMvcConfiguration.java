@@ -7,7 +7,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.HandlerMapping;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -16,7 +18,8 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  * 自定义的Spring Mvc配置，通过@Bean标注，Spring将自动按照类型进行替换。
  * 
  * <p>
- * 	通过继承WebMvcConfigurationSupport类，重写其中相应的方法，可以操作Spring Mvc预置的各种功能特性
+ * 	通过继承WebMvcConfigurationSupport类，重写其中相应的方法，可以操作Spring Mvc预置的各种功能特性。
+ *  注意：如果使用@Configuration与@EnableWebMvc注解进行标注，@EnableAutoConfiguration的自动配置会失效，则需要手动进行各项配置，具体参见org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration 
  * </p>
  *
  * @author xingkelaochen
@@ -29,8 +32,6 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  *
  */
 @Configuration
-// 进行Spring MVC的配置，必须标注@EnableWebMvc注解
-@EnableWebMvc
 public class CustomWebMvcConfiguration extends WebMvcConfigurationSupport {
 
 	@Autowired
@@ -56,6 +57,12 @@ public class CustomWebMvcConfiguration extends WebMvcConfigurationSupport {
 	public HandlerExceptionResolver handlerExceptionResolver() {
 		// TODO Auto-generated method stub
 		return super.handlerExceptionResolver();
+	}
+
+	@Override
+	public HandlerMapping defaultServletHandlerMapping() {
+		// TODO Auto-generated method stub
+		return super.defaultServletHandlerMapping();
 	}
 
 	/**
@@ -90,4 +97,31 @@ public class CustomWebMvcConfiguration extends WebMvcConfigurationSupport {
 		
 	}
 
+	/**
+	 * 配置全局视图控制器，将根路径的访问响应映射到/public/index.html静态文件。
+	 */
+	@Override
+	protected void addViewControllers(ViewControllerRegistry registry) {
+
+		 registry.addViewController("/").setViewName("forward:/res/index.html");
+		 super.addViewControllers(registry);
+		
+	}
+
+	/**
+	 * 默认静态文件默认路径为/static (or /public or /resources or /META-INF/resources)，使其请求不通过DispatcherServlet，可以直接进行URL访问。
+	 * <p>
+	 * 此设置方法等同于属性设置spring.mvc.static-path-pattern与spring.resources.static-locations。
+	 * 在本示例中，由于使用继承的WebMvcConfigurationSupport来进行相关配置，属性文件中的上述配置失效了。
+	 * 这可能是因为继承的WebMvcConfigurationSupport的配置与使用@EnableWebMvc标注产生了一样的效果吧。
+	 * 
+	 * </p>
+	 */
+	@Override
+	protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+		registry.addResourceHandler("/res/**").addResourceLocations("classpath:/public/");
+		super.addResourceHandlers(registry);
+	}
+
+	
 }

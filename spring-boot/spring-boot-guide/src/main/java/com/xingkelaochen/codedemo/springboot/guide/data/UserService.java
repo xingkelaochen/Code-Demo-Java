@@ -41,6 +41,19 @@ public class UserService {
 		return user;
 	}
 	
+	/**
+	 * 主键查询用户
+	 * @param id
+	 * @return
+	 */
+	public Optional<User> findUser(String id) {
+		
+		// 以Id为条件查询对象，对象有可能为空，返回Optional对象
+		Optional<User> user = userRepository.findById(id);
+		
+		return user;
+	}
+	
 	
 	/**
 	 * 查询所有用户列表
@@ -50,9 +63,6 @@ public class UserService {
 		
 		// 获取所有用户列表
 		List<User> users = userRepository.findAll();
-		
-		// 以Id为条件查询对象，对象有可能为空，返回Optional对象
-		Optional<User> user = userRepository.findById("x");
 		
 		return users;
 	}

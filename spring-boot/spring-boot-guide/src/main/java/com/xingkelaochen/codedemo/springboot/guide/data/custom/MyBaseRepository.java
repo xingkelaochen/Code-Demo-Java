@@ -42,5 +42,5 @@ public interface MyBaseRepository<T,ID extends Serializable> extends JpaReposito
 	 * @return
 	 * @throws Exception
 	 */
-	T diable(T t) throws Exception ;
+	T disable(T t) throws Exception ;
 }

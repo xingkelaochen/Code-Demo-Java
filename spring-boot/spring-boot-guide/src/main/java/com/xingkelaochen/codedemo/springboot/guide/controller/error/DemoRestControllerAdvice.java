@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import com.xingkelaochen.codedemo.springboot.guide.controller.DemoController;
+import com.xingkelaochen.codedemo.springboot.guide.controller.DemoRestController;
 
 /**
  * 
@@ -24,8 +24,8 @@ import com.xingkelaochen.codedemo.springboot.guide.controller.DemoController;
  * </p>
  *
  */
-@ControllerAdvice(basePackageClasses = DemoController.class)
-public class DemoControllerAdvice extends ResponseEntityExceptionHandler {
+@ControllerAdvice(basePackageClasses = DemoRestController.class)
+public class DemoRestControllerAdvice extends ResponseEntityExceptionHandler {
 
 	/**
 	 * 当DemoController中的控制方法抛出任何异常时，将向请求者返回ExceptionResponseObject对象，Controller将通过预置的json转换器将此对象转换为json字符串，响应的HttpStatus值为500。

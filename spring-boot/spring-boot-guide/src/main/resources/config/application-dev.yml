@@ -1,0 +1,71 @@
+# 在代码中，属性可以使用@Value("${name}")注解绑定设置的值，而在配置文件中可以使用${name}进行互相引用
+
+# 在类中可以使用@ConfigurationProperties("")注解，将属性绑定到对应的对象中。对应的类参见com.xingkelaochen.codedemo.springboot.guide.configuration.MyServersConfigurationList
+my: 
+  servers:
+    - dev.example.com
+    - test.example.com
+# 上述配置在properties文件中可以写成：
+# my.servers[0]=dev.example.com
+# my.servers[1]=test.example.com
+
+  info:
+    name: xingkelaochen
+    sex: 男
+    
+spring:
+  resources:
+    # 指定静态资源文件路径
+    static-locations: 
+      - classpath:/public/
+  mvc:
+    # 静态文件访问的uri映射路径，默认为/**
+    static-path-pattern: /res/**
+    # 指定使用InternalResourceViewResolver导向jsp页面资源，将在prefix配置的目录下寻找suffix配置后辍名的文件
+    view:
+      prefix: /pages/
+      suffix: .jsp
+  datasource:
+    url: jdbc:h2:mem:test
+    driver-class-name: org.h2.Driver
+    username: root
+    password: 123456
+  # 指定使用ThymeleafViewResolver导向模板html页面资源，将在prefix配置的目录下寻找suffix配置后辍名的文件  
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    
+# 开启debug模式，将输出调试日志
+debug: true
+
+# 在当前目录下生成指定名称的日志文件
+logging:
+  file: dev.log
+  # 在指定目录下生成spring.log日志文件，若有file属性则自动忽略此配置
+  # path: d:/dev/log
+  
+  level:
+    # 指定默认日志级别为WARN
+    root: WARN
+    # 指定包的日志级别
+    org.springframework: DEBUG
+    
+    
+# 内嵌应用服务器的相关配置，也可以实现WebServerFactoryCustomizer<ConfigurableServletWebServerFactory>类进行定制化
+server:
+  port: 8080
+  address: 
+  session:
+    timeout:
+    
+# Actuator配置，使用expose与exclude指定暴露或者排除的项目
+management:
+  endpoints:
+    web:
+      expose:
+         
+      exclude:
+        
+    jmx:
+      exclude:
+        

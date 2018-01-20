@@ -4,10 +4,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 /**
  * 
- *
+ * 用户实体对象
  *
  * @author xingkelaochen
  * 
@@ -18,7 +19,7 @@ import javax.persistence.Id;
  * </p>
  *
  */
-@Entity
+@Entity(name="User")
 public class User {
 
 	@Id
@@ -32,6 +33,9 @@ public class User {
 	private int age;
 	
 	private boolean enabled;
+	
+	@OneToOne
+	private ContactInfo contactInfo;
 	
 	public User(String name,int age) {
 		this.name = name;
@@ -76,6 +80,14 @@ public class User {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	public ContactInfo getContactInfo() {
+		return contactInfo;
+	}
+
+	public void setContactInfo(ContactInfo contactInfo) {
+		this.contactInfo = contactInfo;
 	}
 	
 }
