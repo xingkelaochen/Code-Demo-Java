@@ -33,7 +33,7 @@ public class EntitySuperclass implements Serializable {
 	@Column(name="id",length=32)
 	private String id;
 	
-	private boolean enabled;
+	private boolean enabled = false;
 
 	public String getId() {
 		return id;

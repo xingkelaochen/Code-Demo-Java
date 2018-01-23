@@ -1,0 +1,5 @@
+spring:
+  profiles:
+    # 本示例通过修改profile的值，启动两个不同配置的eureka服务注册中心
+    active: server1
+    #active: server1

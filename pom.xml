@@ -7,6 +7,7 @@
   <modules>
   	<module>java8</module>
   	<module>spring-boot-demo</module>
+  	<module>spring-cloud</module>
   </modules>
   <description>Java技术代码演示</description>
   <url>http://www.xingkelaochen.com</url>

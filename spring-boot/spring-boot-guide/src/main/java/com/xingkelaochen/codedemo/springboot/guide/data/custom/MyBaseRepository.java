@@ -3,8 +3,6 @@ package com.xingkelaochen.codedemo.springboot.guide.data.custom;
 import java.io.Serializable;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 
 /**
@@ -40,8 +38,6 @@ public interface MyBaseRepository<T,ID extends Serializable> extends JpaReposito
 	 * @return
 	 * @throws Exception
 	 */
-	@Modifying
-	@Query(value="update #{#entityName} set enabled=true")
 	T enable(T t) throws Exception ;
 	
 	/**
@@ -50,7 +46,5 @@ public interface MyBaseRepository<T,ID extends Serializable> extends JpaReposito
 	 * @return
 	 * @throws Exception
 	 */
-	@Modifying
-	@Query(value="update #{#entityName} set enabled=false")
 	T disable(T t) throws Exception ;
 }

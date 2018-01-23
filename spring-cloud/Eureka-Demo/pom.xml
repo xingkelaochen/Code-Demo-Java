@@ -1,0 +1,31 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.xingkelaochen.codedemo</groupId>
+		<artifactId>spring-cloud</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+	<groupId>com.xingkelaochen.codedemo.springcloud.eureka</groupId>
+	<artifactId>Eureka-Demo</artifactId>
+
+	<name>Eureka Demo</name>
+	<description>Spring Cloud微服务框架Eureka服务治理演示</description>
+
+	<properties>
+		<!-- 不知为什么，父级模块定义了指定版本号的spring-cloud-dependencies依赖管理，此处还是得明确指定spring-cloud-starter-eureka-server的版本号（此版本号的对应关系由官网查询确定） -->
+		<eureka.version>2.0.0.BUILD-SNAPSHOT</eureka.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-eureka-server</artifactId>
+			<version>${eureka.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+	</dependencies>
+</project>

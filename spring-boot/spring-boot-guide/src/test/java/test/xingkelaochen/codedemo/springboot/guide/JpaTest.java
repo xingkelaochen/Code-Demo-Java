@@ -1,17 +1,21 @@
 package test.xingkelaochen.codedemo.springboot.guide;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.List;
 
-import org.junit.Assert;
+import javax.transaction.Transactional;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.xingkelaochen.codedemo.springboot.guide.Application;
+import com.xingkelaochen.codedemo.springboot.guide.configuration.ApplicationConfinguration;
 import com.xingkelaochen.codedemo.springboot.guide.data.User;
 import com.xingkelaochen.codedemo.springboot.guide.data.UserRepository;
 
@@ -30,8 +34,11 @@ import com.xingkelaochen.codedemo.springboot.guide.data.UserRepository;
  *
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes= {Application.class})
 @DataJpaTest
+// 由于使用了@DataJpaTest注解，测试环境并不会加载指定之外的配置类。
+// 所以UserRepository继承了自定义的MyBaseRepository接口，需要指定ApplicationConfinguration配置类，使Repository使用指定的实现。
+@ContextConfiguration(classes= {Application.class,ApplicationConfinguration.class})
+@Transactional
 public class JpaTest {
 
 	@Autowired
@@ -41,14 +48,20 @@ public class JpaTest {
 	private UserRepository userRepository;
 	
 	@Test
-	public void test() {
+	public void test() throws Exception {
 		
 		// 新建一个User对象，persist方法将此对象转换为managed( 托管 ) 状态，这样就可以使用repository进行相关查询
-		this.entityManager.persist(new User("xingkelaochen",33));
+		User user = this.entityManager.persist(new User("xingkelaochen",33));
+		
+		assertEquals(false,user.isEnabled());
 		
 		List<User> users = userRepository.findByName("xingkelaochen");
 		
-		Assert.assertEquals(users.size(), 1);
+		assertEquals(users.size(), 1);
+		
+		user = userRepository.enable(user);
+		
+		assertEquals(true, user.isEnabled());
 		
 	}
 	

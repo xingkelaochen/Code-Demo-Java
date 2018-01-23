@@ -1,6 +1,5 @@
 package test.xingkelaochen.codedemo.springboot.guide;
 
-import static org.hamcrest.CoreMatchers.any;
 import static org.mockito.Mockito.times;
 
 import java.util.ArrayList;
