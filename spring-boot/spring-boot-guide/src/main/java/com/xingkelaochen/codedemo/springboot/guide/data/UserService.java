@@ -32,9 +32,9 @@ public class UserService {
 	 * 新增用户
 	 * @return
 	 */
-	public User saveUser() {
+	public User saveUser(String name,int age ) {
 		
-		User user = new User("xingkelaochen",33);
+		User user = new User(name,age);
 		
 		user = userRepository.save(user);
 		
