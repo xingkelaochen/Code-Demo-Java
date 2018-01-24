@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: Service-Consume
+  cloud:
+    loadbalancer:
+      retry:
+        # 开启服务调用的重试机制，根据所访问服务的名称需要进行更具体的属性配置，查询ribbon的相关配置方法。
+        enabled: true
+    
+server:
+  port: 3001
+  
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server1:1001/eureka/
+    # 确保fetch-registry配置为true，使客户端能向注册中心抓取注册的服务信息。（默认为true）
+    fetch-registry: true
+    # 服务信息缓存清理时间，默认为30秒
+    registry-fetch-interval-seconds: 30
+    

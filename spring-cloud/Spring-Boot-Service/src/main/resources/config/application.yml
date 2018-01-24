@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: Spring-Boot-Service
+    
+server:
+  port: 2001
+  
+eureka:
+  client:
+    service-url:
+      # 将服务注册到注册服务集群的多个注册中心中
+      # 若有多个服务提供者分别注册到集群中的单个注册中心中时，将会将注册信息转发给其他注册中心。（服务同步）
+      defaultZone: http://eureka-server1:1001/eureka/,http://eureka-server2:1002/eureka/
+  instance:
+  # 由服务提供者向注册中心发送心跳进行（服务续约）
+    # 服务续约任务调用的间隔时间，默认30秒
+    lease-renewal-interval-in-seconds: 30
+    # 服务失效时间，默认90秒
+    lease-expiration-duration-in-seconds: 90
+    
+    # 实例元数据配置
+    metadata-map:
+      # 指定实例zone属性
+      zone: xingkelaochen

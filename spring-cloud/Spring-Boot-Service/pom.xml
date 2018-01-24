@@ -6,22 +6,21 @@
 		<artifactId>spring-cloud</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>com.xingkelaochen.codedemo.springcloud.eureka</groupId>
-	<artifactId>Eureka-Demo</artifactId>
-
-	<name>Eureka Demo</name>
-	<description>Spring Cloud微服务框架Eureka服务治理演示</description>
+	<artifactId>Spring-Boot-Service</artifactId>
 
 	<dependencies>
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-eureka-server</artifactId>
+			<artifactId>spring-cloud-starter-eureka</artifactId>
 			<version>${netflix.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-			<version>${netflix.version}</version>
+			<artifactId>spring-boot-starter-test</artifactId>
 		</dependency>
 	</dependencies>
 </project>

@@ -12,6 +12,8 @@
 	<properties>
 		<spring.boot.version>2.0.0.BUILD-SNAPSHOT</spring.boot.version>
 		<spring.cloud.version>Finchley.BUILD-SNAPSHOT</spring.cloud.version>
+		<!-- 不知为什么，父级模块定义了指定版本号的spring-cloud-dependencies依赖管理，此处还是得明确指定spring-cloud-starter-eureka-server的版本号（此版本号的对应关系由官网查询确定） -->
+		<netflix.version>2.0.0.BUILD-SNAPSHOT</netflix.version>
 	</properties>
 
 	<dependencyManagement>
@@ -97,5 +99,7 @@
 	</build>
 	<modules>
 		<module>Eureka-Demo</module>
+		<module>Spring-Boot-Service</module>
+		<module>Spring-Boot-Consume</module>
 	</modules>
 </project>
