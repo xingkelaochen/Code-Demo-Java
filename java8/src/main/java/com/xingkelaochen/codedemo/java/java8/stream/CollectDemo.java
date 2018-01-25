@@ -3,6 +3,7 @@ package com.xingkelaochen.codedemo.java.java8.stream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.IntSummaryStatistics;
 import java.util.List;
 import java.util.Map;
@@ -144,6 +145,8 @@ public class CollectDemo {
 		System.out.println(userList);
 
 		// 当然也可以不用实现Collector的接口，直接在collect方法中定义
+		// 注意，这种方式的combiner不能传递任何的Characteristics的参数，所以永远是一个IDENTITY_FINISH、CONCURRENT但并非UNORDERED的收集器。
+		// 标记为IDENTITY_FINISH则说明累加器返回的结果是最终的结果，不需要再进行转换。（所以第三个参数BiConsumer不会执行）
 		Arrays.stream(arr).collect(ArrayList::new, List::add, (list1, list2) -> list1.addAll(list2));
 
 	}
@@ -165,8 +168,9 @@ public class CollectDemo {
 			l.add(u);
 			return l;
 		}, (List<User> l1, List<User> l2) -> {
-			l1.addAll(l2);
-			return l2;
+
+			// 与collect方法一样，此处的combiner并不执行，因为不能传递任何的Characteristics的参数，所以永远是一个IDENTITY_FINISH、CONCURRENT但并非UNORDERED的收集器。
+			return null;
 		});
 		// 这种需求不得不使用reduce(List<User> identity, BiFunction<List<User>, ? super User,List<User>> accumulator, BinaryOperator<List<User>> combiner)方法
 		// 首先归约的初始值是一个空的List<User>列表

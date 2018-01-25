@@ -179,7 +179,7 @@ public class StreamBaseDemo {
 		}).collect(Collectors.toList());
 
 		/**
-		 * 利益于Comparator提供的新工厂方法comparing，还能更简单一点
+		 * 得益于Comparator提供的新工厂方法comparing，还能更简单一点
 		 */
 		demoList.stream().sorted(Comparator.comparing(User::getAge)).collect(Collectors.toList());
 
