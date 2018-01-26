@@ -1,14 +1,14 @@
 spring:
   profiles:
     # 本示例通过修改profile的值，启动两个不同配置的eureka服务注册中心
-    #active: server1
-    active: server2
+    active: server1
+    #active: server2
 
 eureka:
   server:
     # 自我保护机制。Eureka Server在运行期间，会统计15分钟内之内心跳失败的比率低于85%的情况，将属于这种情况的实例注册信息保护起来，让其不会过期，尽量保护这些注册信息。
     # 本地调试环境中，服务的终止或异常很容易导致自我保护机制，可能导致抓取到的注册服务不准确，所以将此项设置为false。（默认为true）
-    enable-self-preservation: false
+    enable-self-preservation: true
     
   instance:
     # 配置是否可以使用IP地址来表示注册中心。（默认为false）

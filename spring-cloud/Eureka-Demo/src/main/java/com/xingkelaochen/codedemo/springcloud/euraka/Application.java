@@ -13,6 +13,12 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
  * <p>
  * 	服务注册到注册中心将维护一个双层Map数据结构，第一层Map的Key为服务名称，第二层Map的Key为服务实例名称（InstanceInfo中的instanceId值）
  * </p>
+ * 
+ * <p>
+ * 	CAP原理：C（一致性）、A（可用性）、P（可靠性）。
+ *  Eureka与Zookeeper不同：Zookeeper属于保证CP，当心跳机制超出异常接受范围时，将会把此服务剔除；而Eureka将启动自我保护机制，尽可能保证服务注册信息。
+ *  <b>可以通过设置enable-self-preservation为true关闭保护机制</b>
+ * </p>
  *
  * @author xingkelaochen
  * 
