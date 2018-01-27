@@ -101,5 +101,6 @@
 		<module>Eureka-Demo</module>
 		<module>Spring-Boot-Service</module>
 		<module>Spring-Boot-Consume</module>
+		<module>Hystrix-Dashboard</module>
 	</modules>
 </project>

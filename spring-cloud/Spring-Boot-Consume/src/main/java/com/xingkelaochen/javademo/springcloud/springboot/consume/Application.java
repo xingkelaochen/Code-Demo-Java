@@ -59,7 +59,7 @@ import org.springframework.web.client.RestTemplate;
 // 使用@RibbonClient进行Ribbon的定制化，或者直接申明配置Bean
 // @RibbonClient(name="",configuration= {})
 
-// 使用@EnableCircuitBreaker开启熔断器的支持
+// 使用@EnableCircuitBreaker开启断路器的支持
 @EnableCircuitBreaker
 public class Application {
 

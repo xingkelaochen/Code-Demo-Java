@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCollapser;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.netflix.hystrix.contrib.javanica.annotation.ObservableExecutionMode;
 import com.netflix.hystrix.contrib.javanica.cache.annotation.CacheResult;
 import com.netflix.hystrix.contrib.javanica.command.AsyncResult;
@@ -106,6 +108,19 @@ public class HelloServiceConsume {
 	public User getUserById(String id) {
 		
 		return restTemplate.getForEntity("http://SPRING-BOOT-SERVICE/user/{1}",User.class,id).getBody();
+		
+	}
+	
+	/**
+	 * 支持Hystrix的请求合并功能，使用@HystrixCollaps标注，在指定时间窗口范围内的请求将使用批量方法进行打包请求。
+	 * 也可以通过继承HystrixCollapser实现
+	 * @param id
+	 * @return
+	 */
+	@HystrixCollapser(batchMethod="getUserListByIds",collapserProperties= {@HystrixProperty(name="timerDelayInMilliseconds",value="100")})
+	public User getUserByIdOptimization(String id) {
+		
+		return null;
 		
 	}
 	
