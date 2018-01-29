@@ -14,7 +14,7 @@ public class HelloController {
 	@Autowired
 	private RefactorHelloService refactorHelloService;
 	
-	@RequestMapping(value="hello",method= {RequestMethod.GET})
+	@RequestMapping(value="/hello",method= {RequestMethod.GET})
 	public String hello() {
 		
 		return refactorHelloService.hello(new User("test1","xingkelaochen","ÄÐ",33));

@@ -104,5 +104,6 @@
 		<module>Hystrix-Dashboard</module>
 		<module>Spring-Boot-Feign</module>
 		<module>Hello-Service-Consume</module>
+		<module>Zuul-Demo</module>
 	</modules>
 </project>
