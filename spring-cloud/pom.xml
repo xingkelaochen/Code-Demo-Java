@@ -102,5 +102,7 @@
 		<module>Spring-Boot-Service</module>
 		<module>Spring-Boot-Consume</module>
 		<module>Hystrix-Dashboard</module>
+		<module>Spring-Boot-Feign</module>
+		<module>Hello-Service-Consume</module>
 	</modules>
 </project>

@@ -1,0 +1,33 @@
+server:
+  port: 6001
+  
+spring:
+  application:
+    name: Hello-Service-Consume
+    
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server1:1001/eureka/
+      
+# Ribbon的全局配置使用ribbon.key=value的方式配置      
+ribbon: 
+  ConnectTimeout: 500
+  ReadTimeout: 5000
+  
+# 指定服务的配置，使用<服务端>.ribbon.key=value的方式配置，服务端的名称来源于@FeignClient注解的value属性，以此方式为单个服务的调用配置ribbon属性。
+Hello-Service:
+  ribbon:
+    ConnectTimeout: 500
+    ReadTimeout: 5000
+
+# 全局hystrix配置    
+feign:
+  hystrix:
+    enabled: true # 开启/关闭hystrix支持
+  compression: # 开户/关闭GZIP压缩功能
+    request: 
+      enabled: true
+    reponse:
+      enabled: true
+  
