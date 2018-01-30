@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
  * 通过重写addCorsMappings方法，添加指定路径的CROS支持，这是全局设置的方法。在具体Controller的类或者方法上也可以使用@CrossOrigin注解进行标注配置。
@@ -27,7 +28,7 @@ public class CrosSupportConfiguration {
 
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurer() {
+		return new WebMvcConfigurerAdapter() {
 
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {

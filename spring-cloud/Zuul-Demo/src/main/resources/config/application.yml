@@ -5,30 +5,31 @@ spring:
   application:
     name: Zuul
     
-eureka:
- client:
-  service-url:
+debug: true
+    
+eureka: 
+ client:  
+  service-url:  
     defaultZone: http://eureka-server1:1001/eureka/    
     
 # zuul的路由配置，如果有多重配置情况，则按照配置顺序选择前边的    
 zuul:
-  routes:
+  routes: 
     hello-service:
       # 采用zuul.routes.<route>.path/url两个配置的组合，确定一个符合/hello-api/**的请求转发到http://localhost:6001/的路由功能。
       # 这实际是脱离了Eureka的服务治理环境，因为需要配置服务的真实路径，不利于更改维护，所以不推荐。
       path: /hello-api/**
       url: http://localhost:6001/
       
-  routes:
-    hello-service:
+    hello-service2:
       path: /hello-api/**
       # 采用serviceId指定注册服务名称
-      serviceId: Hello-Service
+      serviceId: Hello-Service-Consume
     # 使用  zuul.routes.<serviceId>.path进行简洁配置。
     # 默认路由，zuul将对eureka中注册的服务采用等同于zuul.routes.<serviceId>=/<serviceId>/**的配置
     Hello-Service: /hello-api/**
-  # 忽略指定的服务路由
-  ignored-services: 
+  # 忽略指定服务的默认路由，*代表全部
+  ignored-services: '*'
   
   # 设置请求的前辍
   prefix: 

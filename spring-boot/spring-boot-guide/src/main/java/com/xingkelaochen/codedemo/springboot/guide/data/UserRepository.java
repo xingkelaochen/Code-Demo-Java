@@ -1,15 +1,13 @@
 package com.xingkelaochen.codedemo.springboot.guide.data;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Repository;
 
@@ -37,15 +35,19 @@ import com.xingkelaochen.codedemo.springboot.guide.data.custom.MyBaseRepository;
 public interface UserRepository extends MyBaseRepository<User, String>{
 
 	/**
+	 * 按照Repository的findByXxx规则，申明使用id进行查询的方法，因为有可能没有此用户，所以返回Optional对象
+	 * @param id
+	 * @return
+	 */
+	public Optional<User> findById(String id);
+	
+	/**
 	 * 按照Repository的findByXxx规则，申明使用name进行查询的方法
-	 * 
-	 * 注解@Nullable与@NonNull可以用在方法或参数上，校验目标是否可以为null。@NonNullApi注解用在包级别的package-info.java文件中，将由方法级别的@Nullable与@NonNull覆盖。
 	 * 
 	 * @param name
 	 * @return
 	 */
-	@Nullable
-	public List<User> findByName(@NonNull String name);
+	public List<User> findByName(String name);
 	
 	/**
 	 * 查询用户(User)联系信息(ContactInfo)的地址等于传入参数的列表。为了消除歧义使用_将两个对象隔开

@@ -13,14 +13,12 @@
   	</dependency>
   	<dependency>
   		<groupId>org.springframework.cloud</groupId>
-  		<artifactId>spring-cloud-starter-eureka</artifactId>
-  		<version>${netflix.version}</version>
+  		<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
   	</dependency>
   	<!-- ribbon是netflix基于Http和Tcp的客户端负载均衡器，它通过在客户端配置的RibbonServerList服务端列表以轮循的访问方式以达到负载功能，与Eureka整合使用时会从配置的服务注册中心获取服务提供者列表 -->
   	<dependency>
   		<groupId>org.springframework.cloud</groupId>
-  		<artifactId>spring-cloud-starter-ribbon</artifactId>
-  		<version>${netflix.version}</version>
+  		<artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
   	</dependency>
   	<dependency>
   		<groupId>org.springframework.boot</groupId>
@@ -28,8 +26,7 @@
   	</dependency>
   	<dependency>
   		<groupId>org.springframework.cloud</groupId>
-  		<artifactId>spring-cloud-starter-hystrix</artifactId>
-  		<version>${netflix.version}</version>
+  		<artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
   	</dependency>
   	<dependency>
   		<groupId>org.springframework.boot</groupId>

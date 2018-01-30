@@ -13,3 +13,6 @@ eureka:
   instance:
     # 配置是否可以使用IP地址来表示注册中心。（默认为false）
     prefer-ip-address: false
+    
+# 开启debug模式，将输出调试日志
+debug: true

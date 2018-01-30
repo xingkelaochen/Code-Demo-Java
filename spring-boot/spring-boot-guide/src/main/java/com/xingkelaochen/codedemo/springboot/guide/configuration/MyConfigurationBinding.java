@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * 
@@ -28,6 +29,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @ConfigurationProperties(prefix="my")
+// 使用@Validated开启@ConfigurationProperties的数据绑定校验功能
+@Validated
 public class MyConfigurationBinding {
 
 	@NotNull

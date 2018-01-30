@@ -9,11 +9,11 @@
 	<artifactId>spring-cloud</artifactId>
 	<packaging>pom</packaging>
 
+	<!-- 注意：不同版本的Spring Cloud中各起步依赖的artifactId可能不同，具体查看依赖dependencies.pom文件中的具体配置。 -->
+	<!-- 注意Spring Cloud与Spring Boot的版本匹配与各组件配置方法，具体信息在官网查询。 -->
 	<properties>
-		<spring.boot.version>2.0.0.BUILD-SNAPSHOT</spring.boot.version>
-		<spring.cloud.version>Finchley.BUILD-SNAPSHOT</spring.cloud.version>
-		<!-- 不知为什么，父级模块定义了指定版本号的spring-cloud-dependencies依赖管理，此处还是得明确指定spring-cloud-starter-eureka-server的版本号（此版本号的对应关系由官网查询确定） -->
-		<netflix.version>2.0.0.BUILD-SNAPSHOT</netflix.version>
+		<spring.boot.version>1.5.9.RELEASE</spring.boot.version>
+		<spring.cloud.version>Edgware.SR1</spring.cloud.version>
 	</properties>
 
 	<dependencyManagement>
@@ -35,7 +35,6 @@
 		</dependencies>
 	</dependencyManagement>
 
-	<!-- 本例将使用Spring Boot 的 2.0.0.BUILD-SNAPSHOT 快照版本，所以引入spring的快照版本库 -->
 	<repositories>
 		<repository>
 			<id>spring-snapshots</id>

@@ -14,13 +14,17 @@
 	<description>SpringBoot代码演示</description>
 
 	<properties>
-		<spring.version>2.0.0.BUILD-SNAPSHOT</spring.version>
+		<spring.version>1.5.9.RELEASE</spring.version>
 	</properties>
 
 	<!-- 使用以下配置方式，指定spring boot的依赖管理 。这样解决了两个问题：1.本项目可以继承其它项目；2.本项目的子模块可以继承本项目；3.本项目的spring 
 		boot起步依赖不需要再指定版本号 -->
-	<!-- 等同于以下继承方式 <parent> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-parent</artifactId> 
-		<version>2.0.0.BUILD-SNAPSHOT</version> </parent> -->
+	<!-- 等同于以下继承方式
+	 <parent> 
+	 	<groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-parent</artifactId> 
+		<version>2.0.0.BUILD-SNAPSHOT</version> 
+	</parent> 
+	-->
 	<dependencyManagement>
 		<dependencies>
 			<dependency>

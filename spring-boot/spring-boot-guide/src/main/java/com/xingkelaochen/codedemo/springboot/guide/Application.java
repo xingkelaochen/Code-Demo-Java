@@ -6,7 +6,10 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+
+import com.xingkelaochen.codedemo.springboot.guide.configuration.MyConfigurationBinding;
 
 /**
  * Spring Boot推荐使用@Configuration的方式，代替原本使用xml文件中进行属性配置的模式。
@@ -29,6 +32,7 @@ import org.springframework.context.annotation.Bean;
 //@EnableAutoConfiguration(exclude= {})
 //@ComponentScan(basePackages= {})
 @SpringBootApplication
+@EnableConfigurationProperties(value= {MyConfigurationBinding.class})
 public class Application {
 	
 	/**

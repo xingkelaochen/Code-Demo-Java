@@ -1,6 +1,7 @@
 package test.xingkelaochen.codedemo.springboot.guide;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.xingkelaochen.codedemo.springboot.guide.Application;
 import com.xingkelaochen.codedemo.springboot.guide.configuration.ApplicationConfinguration;
+import com.xingkelaochen.codedemo.springboot.guide.configuration.MyConfigurationBinding;
 import com.xingkelaochen.codedemo.springboot.guide.data.User;
 import com.xingkelaochen.codedemo.springboot.guide.data.UserRepository;
 
@@ -54,6 +56,9 @@ public class JpaTest {
 		User user = this.entityManager.persist(new User("xingkelaochen",33));
 		
 		assertEquals(false,user.isEnabled());
+		
+		user = userRepository.findById(user.getId()).get();
+		assertNotNull(user);
 		
 		List<User> users = userRepository.findByName("xingkelaochen");
 		
