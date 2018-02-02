@@ -3,6 +3,8 @@ package com.xingkelaochen.javademo.springcloud.springboot.service.rest;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,9 +21,12 @@ public class HelloController {
 	private static Log log = LogFactory.getLog(HelloController.class);
 	
 	@RequestMapping(value="hello")
-	public String hello() {
+	public String hello(HttpServletRequest request) {
 		
-		return "hello world!";
+		// 因为开启了sleuth，所以在request的head中存在一些上级服务传递过来的跟踪信息
+		String traceId = request.getHeader("X-B3-TraceId");
+		
+		return "hello world!["+traceId+"]";
 		
 	}
 	

@@ -1,8 +1,10 @@
 package com.xingkelaochen.javademo.springcloud.feign.consume.service;
 
 import org.springframework.cloud.netflix.feign.FeignClient;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.xingkelaochen.javademo.springcloud.feign.api.service.HelloService;
+import com.xingkelaochen.javademo.springcloud.feign.api.dto.User;
 
 /**
  * 
@@ -19,6 +21,9 @@ import com.xingkelaochen.javademo.springcloud.feign.api.service.HelloService;
  *
  */
 @FeignClient(value="HELLO-SERVICE",fallback=HelloServiceFallback.class)
-public interface RefactorHelloService extends HelloService {
+public interface RefactorHelloService {
 
+	@RequestMapping("hello")
+	public String hello(@RequestBody User user);
+	
 }

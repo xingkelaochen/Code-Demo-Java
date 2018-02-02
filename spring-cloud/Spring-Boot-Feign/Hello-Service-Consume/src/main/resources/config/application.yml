@@ -30,4 +30,6 @@ feign:
       enabled: true
     reponse:
       enabled: true
+      
+debug: true
   

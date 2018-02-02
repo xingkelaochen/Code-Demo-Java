@@ -6,6 +6,12 @@ spring:
       retry:
         # 开启服务调用的重试机制，根据所访问服务的名称需要进行更具体的属性配置，查询ribbon的相关配置方法。
         enabled: true
+  zipkin: 
+    base-url: http://localhost:7000
+  sleuth:
+    sampler:
+      # Sleuth链路跟踪抽样百分比
+      percentage: 1
     
 server:
   port: 3001

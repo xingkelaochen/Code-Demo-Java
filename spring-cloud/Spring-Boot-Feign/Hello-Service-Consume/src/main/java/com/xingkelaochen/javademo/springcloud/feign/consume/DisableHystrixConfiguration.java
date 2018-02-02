@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 
+import com.xingkelaochen.javademo.springcloud.feign.consume.service.HelloServiceFallback;
+
 import feign.Feign;
 
 /**
@@ -22,7 +24,7 @@ import feign.Feign;
 @Configuration
 public class DisableHystrixConfiguration {
 
-	@Bean
+//	@Bean
 	@Scope("prototype")
 	public Feign.Builder feignBuilder(){
 		return Feign.builder();

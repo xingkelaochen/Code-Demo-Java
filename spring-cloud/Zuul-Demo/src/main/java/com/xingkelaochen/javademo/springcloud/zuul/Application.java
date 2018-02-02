@@ -7,13 +7,16 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.cloud.netflix.zuul.filters.discovery.PatternServiceRouteMapper;
 import org.springframework.context.annotation.Bean;
 
+import com.netflix.zuul.ZuulFilter;
+import com.xingkelaochen.javademo.springcloud.zuul.filter.CustomFilter;
+
 /**
  * 一般，Spring Cloud服务治理下的各微服务或者组件，都在其内部生态环境中基于Eureka服务的注册与发现基础进行通信。
  * 传统的分布式应用结构，提供给外部的服务都是通过类似F5、nginx等手段进行代理转发和负载均衡，最终才到达外部服务接口。
  * Spring Cloud使用了Zuul在请求到达外部接口之前增加了一层API网关的结构，为Spring Cloud提供一个对外的门面，它可以解决以下两种问题：
  * <p>
  * 	1. 路由转发：依托与在Eureka体制内的优势，Zuul可以将符合规则的请求转发给注册中心的指定服务（当然也可以直接指定url）。
- *  2. 过滤：为外部请求添加一个自定义的过滤机制，这样可以避免一些通用的功能冗余在多个微服务中。
+ *  2. 请求过滤：为外部请求添加一个自定义的过滤机制，这样可以避免一些通用的功能冗余在多个微服务中。
  * </p>
  *
  *

@@ -5,6 +5,14 @@ spring:
   profiles:
     #active: service1
     active: service2
+    
+  zipkin: 
+    base-url: http://localhost:7000
+    
+  sleuth:
+    sampler:
+      # Sleuth链路跟踪抽样百分比
+      percentage: 1
   
 eureka:
   client:
@@ -24,3 +32,5 @@ eureka:
     metadata-map:
       # 指定实例zone属性
       zone: xingkelaochen
+      
+debug: true
