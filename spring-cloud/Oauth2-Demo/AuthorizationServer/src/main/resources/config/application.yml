@@ -1,0 +1,39 @@
+server:
+  port: 10000
+  # 测试环境下，AuthorizationServer、ResourceServer、Client使用localhost与不同的port，并且都使用/应用路径，所以它们共享cookie，必须设置context-path区分
+  context-path: /auth
+  
+spring:
+  application:
+    name: Oauth2-Authorization-Server
+  
+  profiles:
+    active: jdbc
+ 
+  datasource: 
+      url: jdbc:h2:mem:Authorization-Server-Jdbc
+      driver-class-name: org.h2.Driver
+      username: root
+      password: 123456
+      
+      # 应用启动后自动创建数据库表结构，若不进行此配置则默认也会加载（但实测发现若不配置此项，建表操作将在CommandLineRunner执行之后，这将导致本例在没有表结构的情况下进行数据库操作的异常）
+      schema: 
+        - classpath:schema/schema.sql
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+debug: false 
+
+security:
+  user:
+    password: 123456
+  oauth2:
+    sso:
+      filter-order: 3
+      
+logging:
+  level:
+    org.springframework.security: debug

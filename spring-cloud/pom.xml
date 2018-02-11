@@ -121,5 +121,6 @@
 		<module>Hello-Service-Consume</module>
 		<module>Zuul-Demo</module>
 		<module>Zipkin-Demo</module>
+		<module>Authorization-Demo</module>
 	</modules>
 </project>
