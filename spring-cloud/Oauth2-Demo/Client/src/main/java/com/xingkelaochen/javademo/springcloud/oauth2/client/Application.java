@@ -15,25 +15,21 @@ import org.springframework.security.oauth2.client.token.grant.password.ResourceO
 @SpringBootApplication
 public class Application {
 
-	@Autowired
-	private OAuth2ClientContext oAuth2ClientContext;
-	
-	@Bean
-	public OAuth2RestTemplate oAuth2RestTemplate() {
-		return new OAuth2RestTemplate(resource(), oAuth2ClientContext);
-	}
-	
-	protected OAuth2ProtectedResourceDetails resource() {
-	    ResourceOwnerPasswordResourceDetails resource = new ResourceOwnerPasswordResourceDetails();
-	    List scopes = new ArrayList<String>(2);
-	    scopes.add("trust");
-	    resource.setAccessTokenUri("http://localhost:10000/oauth/token");
-	    resource.setClientId("xingkelaochen");
-	    resource.setClientSecret("123456");
-	    resource.setGrantType("authorization_code");
-	    resource.setScope(scopes);
-	    return resource;
-	}
+//	@Autowired
+//	private OAuth2ClientContext oAuth2ClientContext;
+//	
+//	protected OAuth2ProtectedResourceDetails resource() {
+//	    ResourceOwnerPasswordResourceDetails resource = new ResourceOwnerPasswordResourceDetails();
+//	    List scopes = new ArrayList<String>(2);
+//	    scopes.add("trust");
+//	    resource.setAccessTokenUri("http://localhost:10000/auth/oauth/token");
+//	    resource.setClientId("xingkelaochen");
+//	    resource.setClientSecret("123456");
+//	    resource.setGrantType("authorization_code");
+//	    resource.setScope(scopes);
+//
+//	    return resource;
+//	}
 	
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);

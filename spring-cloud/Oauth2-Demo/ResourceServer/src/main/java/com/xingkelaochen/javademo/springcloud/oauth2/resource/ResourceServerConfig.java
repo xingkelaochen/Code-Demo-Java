@@ -7,6 +7,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 
 @Configuration
 @EnableResourceServer
+//@EnableGlobalMethodSecurity
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	
 	@Override
@@ -16,7 +17,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 		
 		http
 			.authorizeRequests()
-			.antMatchers("/").permitAll()
 			.anyRequest().access("#oauth2.clientHasRole('test')");
 	}
 

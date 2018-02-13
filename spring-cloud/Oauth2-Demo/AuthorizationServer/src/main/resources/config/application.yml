@@ -28,12 +28,14 @@ spring:
 debug: false 
 
 security:
-  user:
+  basic:
+    enabled: false
+  user: 
     password: 123456
   oauth2:
     sso:
       filter-order: 3
       
 logging:
-  level:
+  level: 
     org.springframework.security: debug

@@ -10,7 +10,8 @@ security:
     resource:
       id: oauth2-resource-server
       user-info-uri: http://localhost:10000/auth/user
-      prefer-token-info: false
+      prefer-token-info: true
+      token-info-uri: http://localhost:10000/auth/oauth/check_token
       
 logging:
   level:

@@ -13,9 +13,12 @@ security:
       user-authorization-uri: http://localhost:10000/auth/oauth/authorize
       access-token-uri: http://localhost:10000/auth/oauth/token
       clientAuthenticationScheme: form
-    resource:
-      prefer-token-info: false
-      token-info-uri: http://localhost:10000/auth/oauth/check_token
+      scope:
+        trust
+    resource: 
+      # prefer-token-info: false
+      user-info-uri: http://localhost:10000/auth/user
+      # token-info-uri: http://localhost:10000/auth/oauth/check_token
       
 logging:
   level:
