@@ -16,9 +16,9 @@ security:
       scope:
         trust
     resource: 
-      # prefer-token-info: false
+      prefer-token-info: false
       user-info-uri: http://localhost:10000/auth/user
-      # token-info-uri: http://localhost:10000/auth/oauth/check_token
+      token-info-uri: http://localhost:10000/auth/oauth/check_token
       
 logging:
   level:
