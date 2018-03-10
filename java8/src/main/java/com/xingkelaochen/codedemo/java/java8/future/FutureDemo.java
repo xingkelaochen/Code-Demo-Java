@@ -159,7 +159,7 @@ public class FutureDemo {
 	}
 
 	/**
-	 * 同样还是执行asyncProcess方法中对于两个参数的相同操作，使用JDK1.8中新加入的CompletableFuture进行处理 <br />
+	 * 同样还是执行asyncProcessByFuture方法中对于两个参数的相同操作，使用JDK1.8中新加入的CompletableFuture进行处理 <br />
 	 * CompletableFuture与Future一样，都可以使用get方法获取返回结果 <br />
 	 * 使用complete方法在子线程中将结果通知给CompletableFuturer；并且使用completeExceptionally也能将子线程中的异常传递回调用者，这时调用者将能在ExecutionException异常中获取具体信息
 	 * 
@@ -303,7 +303,7 @@ public class FutureDemo {
 
 	/**
 	 * 使用Stream的方法演示同步执行 <br />
-	 * 由于本例的情景并无实际列表，所以使用rangeClosed来模拟三次循环调用，为了方便演示代码，此处都以 相加 运算为例
+	 * 为了方便演示代码，此处都以 相加 运算为例
 	 * 
 	 * @param a
 	 *            需要运算的a整数
